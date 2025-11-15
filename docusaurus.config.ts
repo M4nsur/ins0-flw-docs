@@ -18,7 +18,7 @@ const config: Config = {
 
   i18n: {
     defaultLocale: "ru",
-    locales: ["ru", "en"],
+    locales: ["ru"],
   },
 
   presets: [
@@ -83,14 +83,16 @@ const config: Config = {
       },
       items: [
         {
+          type: "doc",
+          docId: "intro",
+          label: "📘 Введение",
+          position: "left",
+        },
+        {
           type: "docSidebar",
           sidebarId: "tutorialSidebar",
           position: "left",
           label: "🔌 API Reference",
-        },
-        {
-          type: "localeDropdown",
-          position: "right",
         },
         {
           href: "https://github.com/M4nsur/himma-flw",
@@ -99,6 +101,7 @@ const config: Config = {
         },
       ],
     },
+
     footer: {
       style: "dark",
       links: [
@@ -120,14 +123,18 @@ const config: Config = {
               href: "https://github.com/M4nsur/himma-flw-docs",
             },
             {
-              label: "Main Project",
+              label: "Frontend",
               href: "https://github.com/M4nsur/himma-flw",
+            },
+            {
+              label: "Backend API",
+              href: "https://github.com/M4nsur/himma-flw-api",
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Himma-flw Project. Built with Docusaurus.`,
     },
+
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,

@@ -7,7 +7,7 @@ const sidebars: SidebarsConfig = {
       label: "🔌 Habits API",
       link: {
         type: "doc",
-        id: "api/habits/habits-api",
+        id: "api/habits/create-habit",
       },
       items: [
         {
