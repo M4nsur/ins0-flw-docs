@@ -1,0 +1,73 @@
+---
+id: get-all-pomodoro-sessions
+title: "Get all pomodoro sessions"
+description: "Получить список всех Pomodoro-сессий пользователя."
+sidebar_label: "Get all pomodoro sessions"
+hide_title: true
+hide_table_of_contents: true
+api: eJzdV81u20YQfpXFnhyDlkilBgLdXLRIgxZIgLgI0FiHtbi2GJNcZrl0YwgCIrtJDjFgtKeiaFG06AMoalQrdqS8wuwr9EnaWZIiJdGuneRUw4BNcma++ftmdrtUsd2YNh/SeyIQrpCCtizq8rgtvUh5IqRNCr/CFM71kX4BY32oj4nuwzsY6z5M4YzAUPdhpJ+R3MCaee7rPozhDYF3RvkYTmEKQxjoQxjBuT6pbYXwM0zhL5jAlOjvYIxS+lA/zeX0sVEm8E4/hTEM9Uv9As5gZBE4hQG8hoF+ASOCijBG0ZGRm8JrfYRePYURvIURTGBc2wqpRSMmWcAVlxhvl4Ys4LRJO2zbU3dcalEPg32ccHlALRq3OzxgtNml6iBCuVhJL9ylvaXs/FG4Xu0w7VkzNMXivY8LVspFGWhHiuCqMBbdETJgijapyxRfU17AK7B/MSgDODcxFumGwVyE4iPD/gRTmMBIP18CbVlU8jgSYcxjNN+wbfwzr3/3S2rRtggVDxV+ZVHke22GX+uPYhTpLnvIpGTouqd4EJfei+1HvK0o4j5OPMldZI6H9UxiLk1hjaRFY8Wk4u4GCruJNHgmMYpLmUSKo2xbcpYKtSwaSRFxqbw0Fs+tShh/woLIx1eRY7xg7t3QP6BNJRPem3lxqWZSqZnToEI1THyfbaMuyi7V5zcY6hM4NXNhsfen8Ias6D68rZEvECAmG/fu3Jhzp+NgzTNefCh6iQwF8iaL9yqAU1yDVpGuMAmwtt8KuYfV7AipPpWc4YMvwt30/1bZXiaqPGUe83G4iZZ75Ya4GhHKpht2Y33Ncdac9U3Hbtr4+w3abAsUuJ7VxXxehNJYz1Fm7VtAYBvvckktGnihF2Cu7IpZNYAzfQhjLIfuwxkM9AmB1zivszVwjNNf99NhP8TFMoIzfQQTU8Vn5SQ467bdmydQ4c+2ED5nSDCX77DEV7S5w/x4uV2+1y/hHAbE7IxiUaFf2Lk4XoYwgImZaSV+XjW7C7zqLffDfR7H6Ax+y4IzhDcEzD6aF3ESBEwepE2eL9SxyV/ubkG0MbXoPvMTblYbDo90QsxojTwraIZNkDf/rMeLBq1uuIV+q+6XcrtgyRYqZqrSa2WMv0a4BbOrQm2UQ82Cy0KlDr1qpM5VInWuGan5sWjAVUegO7tcmbOI6tAmrUf5oSnOU2HRmMv9/JCSSB9rp1TUrNd90WZ+R8Sqecu+ZddZ5NX3HbrY45/xfe6LKOChIqkpsym9cEeYNl7oRxyMmFEu41Tfqdk1e8nqxr07eS30kWm+AQzhPD1f/VugitOfPoG3hmUE2a6foWS2E3Lp2la4Fa6uwo8wMRPhT7Srn6Nuc3V1K1wj2SFxpA8JvNIv8/OnGfqGqNOKtTMwwCullXMNU0WnZWaK/XGRFXgFIzgtvECDZ6iK5mEKr8yJZWLmXzk/N7Lwfy+lZzBLjsmAUyMPhNwjK411gu7A5Ab5+/kP5D5uJGLWEFmZfdoKG9eUv3lN+U8ukP9KhLu5uLO+dtMuVHCSRiJWATMrJDsn3uaKMN8nOQNIiQFzrdctTm//m6tINo8Uf6Lqkc88kyPD9W42Gh7S5dHQsiiyHz92u9ss5l9Lv9fD1+lRGweG68W43d3qBTiXy/++uFzg6B4/mLs4ZdOYmmvABzlQvsxcCj67R70v9iWXmUuBs3vV+8JeeJm5PFoxB9nCB+mlp7iHuEw7nLlcmgZINTbabR6pktbStQetzJbS7c83aa/3D5jt8yQ=
+sidebar_class_name: "get api-method"
+info_path: docs/api/pomodoro/pomodoro-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get all pomodoro sessions"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/pomodoro-sessions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Получить список всех Pomodoro-сессий пользователя.
+Можно фильтровать по привычке, задаче или периоду времени.
+
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"query","schema":{"type":"string"},"description":"Фильтр по привычке"},{"name":"taskId","in":"query","schema":{"type":"string"},"description":"Фильтр по задаче"},{"name":"from","in":"query","schema":{"type":"string","format":"date-time"},"description":"Начало периода"},{"name":"to","in":"query","schema":{"type":"string","format":"date-time"},"description":"Конец периода"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","required":["id","userId","type","startedAt","duration","interrupted","createdAt"],"properties":{"id":{"type":"string","example":"p1","readOnly":true},"userId":{"type":"string","example":"u1","readOnly":true},"habitId":{"type":"string","nullable":true,"description":"Связь с привычкой (см. Habits API)","example":"h1"},"taskId":{"type":"string","nullable":true,"description":"Связь с задачей (см. Tasks API)","example":"1"},"type":{"type":"string","enum":["work","shortBreak","longBreak"],"example":"work","title":"PomodoroType"},"startedAt":{"type":"string","format":"date-time","example":"2025-11-15T10:00:00Z"},"completedAt":{"type":"string","format":"date-time","nullable":true,"example":"2025-11-15T10:25:00Z"},"duration":{"type":"integer","minimum":0,"description":"Фактическая длительность в секундах","example":1500},"interrupted":{"type":"boolean","default":false,"description":"Была ли сессия прервана"},"createdAt":{"type":"string","format":"date-time","readOnly":true}},"title":"PomodoroSession"}},"examples":{"habitSessions":{"summary":"Сессии для привычки","value":[{"id":"p1","habitId":"h1","taskId":null,"type":"work","startedAt":"2025-11-15T10:00:00Z","completedAt":"2025-11-15T10:25:00Z","duration":1500,"interrupted":false}]},"taskSessions":{"summary":"Сессии для задачи","value":[{"id":"p2","habitId":null,"taskId":"1","type":"work","startedAt":"2025-11-15T11:00:00Z","completedAt":"2025-11-15T11:25:00Z","duration":1500,"interrupted":false}]}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

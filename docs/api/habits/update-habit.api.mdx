@@ -1,0 +1,71 @@
+---
+id: update-habit
+title: "Update habit"
+description: "Update habit"
+sidebar_label: "Update habit"
+hide_title: true
+hide_table_of_contents: true
+api: eJytVs1u20YQfhVi0kNrUBbVIHXKmxrHiNEGEQIHPcgqsCJH0sbkLrO7lC0IBOL20IMPfoa+gevGrdHE6Sss36iYpX5oSXbQH8OA6d3Z2W+++WZmp2DYUEPYhWesz42Gng8ZUyxFg4rWpyBYihDCiPb3Y/CBCwghY2YEPih8k3OFMYRG5eiDjkaYMginYCYZHdNGcTGEouhVxqjNNzKekMXq2UgKg8LQFsuyhEfMcCmar7UUtLbmWvZfY2TAh0zJDJXhqGm3wrsGwIcYdaR4Rk437itMuYhRPRWsnxCshU1fygSZqBsd8DtuiWQi1cYdpqIRH292XPhguElozSXiVRYzg1AUhbtTZ1LoKrwvg4D+3AoGXnwL/4G/ZSK6wCnDuUblUu249GHgMieiCayz5IM2TJldguvDULJkl000wVHIDMZtuiF34dB3bzVdPF4nywc8YWnm6Bi1iLsZonstc2e5Of0+pOzkOxRDM4KwFQT1c8+lElwMvecYc+M4+6Rabrl7FARFnaNNIEWeErsx4wmReIx45D6iXBuZEitLPHOjuSD25p4PyOv/I1QfBlKlzEAIhrscL+8PdsKHAbkwTA3RUDo7qL5HPKr54cLgEBUxwQVPKbyWY6X63il80BlGfMAjp4flSaYUo/C4wVT/M48LjN2W/9B/1Cvq4rsvxqqYavK8/9r7i5W0MWB5YiAcsETj3UVPvdQYVFSiPzzoBo2v24091hj0pl8Vn93i/MHe3u5O4FjPlBwq1HWMIk/7DuIioEEimaljDmpUOX0rZPELkUyq7lrU6/FTTDVmklhzsSzjf+litc25BrdabFA1P89NHIoRzUjG1cyJRhWpIwih6Qx0czobTQX1IlTj+eDKVUL9w5gsbDYTGbFkJLUJHwePgybLeHPcgtWbd3GMicxSFMarXAENLmqhL5fD6+k8bYvhuCDhtrvF8lrFVhPvdo0uzWdyWi4s1TjLBBcD6ZJQZ1N77c4++EAMVABa28F2sAar3dn37Dv7vjz3yp/sX+Vbe2Ev7Xt7ZW/sdXnuuaVre1melT/bP+2F/WCvPfr9WP5YnjrD32nfXtQPfLS/lW/tVXlantqL7UNxKLa27C/2sjy3fzjLm/LMXhHEcGvrUDS8jkxlLJWkJa8xR3T3JZfk3n6oYHoO9a/O+syzN/bCvtsI/NB1w0xqkzJRS9mKyDa3e4MnppkljDsnTlDTmfy61YuIJl04fxv1fCCJ0eZ02mcaX6mkKGj5TY5qAmG358OYKU4qcBqNuZ4pwrWSNRyLmQ6fv5xN6S88mg2b8M0brKD2OmZJTv+BD0c4qT3gCmqbI2QxKgeh2n1SXdRwM2Z5eu0hUfjzE+0owszca9urFW+nffDkGfjQn73+UhnTIcWOqT7YcQVVushd73NrU0iYGOZsSLaVU/r5G5Ak5zc=
+sidebar_class_name: "patch api-method"
+info_path: docs/api/habits/habits-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Update habit"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/habits/{habitId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Update habit
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string"},"description":{"type":"string"},"reminderEnabled":{"type":"boolean"},"reminderTime":{"type":"string"},"color":{"type":"string"},"archived":{"type":"boolean"}},"title":"HabitUpdate"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object","required":["id","userId","name","frequency","reminderEnabled","startDate","goalDays","createdAt","updatedAt"],"properties":{"id":{"type":"string","example":"h1"},"userId":{"type":"string","example":"u1"},"name":{"type":"string","maxLength":100,"example":"Morning Meditation"},"description":{"type":"string","maxLength":500},"frequency":{"type":"string","enum":["daily","weekly","custom"],"example":"daily","title":"FrequencyType"},"reminderEnabled":{"type":"boolean"},"reminderTime":{"type":"string","format":"time","example":"07:30"},"targetDaysPerWeek":{"type":"integer","minimum":1,"maximum":7},"specificDays":{"type":"array","items":{"type":"integer","minimum":1,"maximum":7},"example":[1,3,5]},"startDate":{"type":"string","format":"date"},"goalDays":{"type":"integer","minimum":1},"archived":{"type":"boolean","default":false},"color":{"type":"string","pattern":"^#[0-9A-Fa-f]{6}$","example":"#FFD700"},"progress":{"type":"number","format":"float","minimum":0,"maximum":100,"readOnly":true},"createdAt":{"type":"string","format":"date-time","readOnly":true},"updatedAt":{"type":"string","format":"date-time","readOnly":true}},"title":"Habit"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: update-task
+title: "Update task"
+description: "Update task"
+sidebar_label: "Update task"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVs1u20YQfhViTq1BWbTaoglvTlKgRgtESJyTLRRrcixtTO4yu0vXgkDAclGkQA5Gr731DVw3atU6dl9h+UbFLEWJ+oGDpocIgkTOzM5+O/PNzI7AsL6G8AD2mT7R0PMhY4qlaFCReASCpQghGKZP9mLwgQsIIWNmAD4ofJVzhTGERuXog44GmDIIR2CGGa3SRnHRh6LoVcaozSMZD8lidW0khUFhSMWyLOERM1yK9kstBcnWXMujlxgZ8CFTMkNlOGqn5SbBDQh8iFFHimfkdbM+xyfMbFjrw7FUKTMQQkwGhQ8RM9iXarjRUaa4VNxsUPqAIk8p2on8HnxIMeZ5Cj4MeH9AscczlmaEv5L49XGgW/sk/zKVsVSy4Z8Lg31UpNWGmVzft3eGIq4kXHyXKdlXqDVQBmhvg5TliIkIkwTjZVTLC2pwRJ3n1bZFsSx+kVUhK0ihUGdS6CpRnSCgv6WswNNv4H8wYUGpA+DxHGAjI/PwNKLoQ6SQGYx3yUfuANNzb5VaPN4Y1XlwdmBx+HW7lItvUfTNAMLPfEjZWf3WCYKml0f50OsrGaGibd/H21VPwX8hcnPbTtD5ohU8bAU79/O7uaaLSkvBko9MehdbntIewUq4wP5i7+yNnZav7aQclxf22t559k97Za/tpDwvfyp/trf2tnxT/ujVW3jl2BmP7dT+1Txw5+OXV5Os78tvy/AUXVmw+KlIhlWnLZoc/2AX88N8uJOVTuF6xCrdoeofHk0fRx0zkHE1fyJiiptDIbRJr9ujakgVVOaoTusJlquEuGVMFrbbiYxYMpDahA+CB0GbZbx9ugOr2z7BU0xklqIwXuUKaIRRC3q2GGNf1Ymbj51FBJb9LcR1bVLBfd4Kvmx1HkKz3hami4qq62JRA8GCiEukKYh0x7KJyM11b7e7Bz5QSCpAO9vBdrAGc7e759m39qa89Mof7D/luauTGzuxt3ZaXlaF89Zela/tlX1np1459pzZ1N7Rb3lhJ+XFTEffv+0VyezvM/0labYPxaHY2rK/2uvy0rl0FWgnhDLc2joULa9b1yJBatWg7F15UY4doD/s1F67pQ7YdXluJ/ZdhdRzwH9z1m88e0ug17AfiqqtaJMy11hnF51lxm1uvgbPTDtLGHc+HL9GMy4euJsSlW84uzL1fCC+kWo0OmIaX6ikKEj8KkdK+UHPh1OmODuihB2MIOaanmMIj1micQ3FfEDCJ89mI+9TjxrGJnQzIRM0/U5ZktMb+HCCw8W1rugVPgyQxagcgkr5uNqntU8uFovXhnLh1yt2owgzc69tr1HG3d39x1+DD0ezO2EqY1qkGM0J+nVIpTu467lONoKEiX7O+mRbOaXPv6tpAfE=
+sidebar_class_name: "patch api-method"
+info_path: docs/api/tasks/tasks-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Update task"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/tasks/{taskId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Update task
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"taskId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"title":{"type":"string"},"description":{"type":"string"},"dueDate":{"type":"string","format":"date"},"category":{"type":"string"},"priority":{"type":"string","enum":["low","medium","high"],"example":"high","title":"Priority"},"pomodoro":{"type":"integer"},"status":{"type":"string","enum":["pending","in_progress","completed","cancelled"],"example":"in_progress","title":"TaskStatus"}},"title":"TaskUpdate"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object","required":["id","title","priority","status","pomodoro","createdAt","updatedAt"],"properties":{"id":{"type":"string","example":"1"},"title":{"type":"string","minLength":3,"maxLength":200,"example":"Buy groceries"},"description":{"type":"string","maxLength":2000},"dueDate":{"type":"string","format":"date","example":"2025-09-01"},"category":{"type":"string","example":"Personal"},"priority":{"type":"string","enum":["low","medium","high"],"example":"high","title":"Priority"},"pomodoro":{"type":"integer","minimum":0,"description":"Количество завершённых pomodoro сессий","example":2},"status":{"type":"string","enum":["pending","in_progress","completed","cancelled"],"example":"in_progress","title":"TaskStatus"},"createdAt":{"type":"string","format":"date-time","readOnly":true},"updatedAt":{"type":"string","format":"date-time","readOnly":true},"completedAt":{"type":"string","format":"date-time","readOnly":true}},"title":"Task"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

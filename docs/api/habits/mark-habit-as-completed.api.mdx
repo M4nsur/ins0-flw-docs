@@ -1,0 +1,71 @@
+---
+id: mark-habit-as-completed
+title: "Mark habit as completed"
+description: "Mark habit as completed"
+sidebar_label: "Mark habit as completed"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VsFu20YQ/RViTo2xsmg1RVPeXLdADaSokaYnWYcVOZY2IXeZ3ZVjQSBgpyhSwAej1976B4oSp2odu7+w/KNilpQpWXKLAm0FHaidN7NvZh/fagKWDwxEXdhTWZ6iFUoa6DHIueYZWtQUnIDkGUIEQ94Xdj8BBkJCBDm3Q2Cg8cVIaEwgsnqEDEw8xIxDNAE7zinNWC3kAIqiV4HR2M9VMibE3dxYSYvSUojneSpiTpTaz4yStLZWWvWfYWxXSHQh4RaBavmWkPjmKlOJ0qpqTqsctRVoqJJHr5FlcKR0xi1EFaBYrteg+0qlyCWFmy2asJAWB6iBQSakyEYZRGHB/LI0wo43QlESrhuyHdZhH7OHPQZ4wmlviDoMrLD0BPuLIo/xGFNiINWmToqiyWlOeU+jb6ugsEaTK2mqeXTCHT8WNLEWOWEp0cMT+JdOSFClRk3/7MBEsqHJptym2P99xuzO+NzP7sZduXn52l2WZ+UrN3M3gfvVTd3MXZan5Y/lT+7aXZfn5Q/BYo+gPPPgMzd3v8F/p5rblnft346oZUWG90uNQcZPHqMc2CFEn4ThZul50RV3R/Q1188Df4YBN8GyFDK0Q5WQ3yhDQvK2E0Hbg017Uh980Y6XPIyBQX288K+RTsm+rM2jdjtVMU+HytjoUfgobPNctI934C6fL2g+Ks9Q2qAqBeRfpPMnjYd9uRjxwkegE3YetsJPW53PVhRd+9uSgMKVE+0sZrqkWiGPlB9yPcKvfMPB7sE+MKDeKqY72+F2uMZ/92A/cO/cVXkRlN+7P8pTL7Yrd+mu3by8CPzS3M3K8/K1+91N3Qc3D+h7U74qzzzwPcXddDnhxr0tT2tZTrcP5aHc2nK/uFl54dXsNewuiWK0tXUoW8HBQs3Ep7VgdP8mMyrvPlQ0A8/6jUefB+7aTd27jcQP67fT2Ix7G6ovrPtFtTKsWx1bPLHtPOXC1/OqmdR661YGQ8qKGueKV69NUhVBJ5M+N/idTouCll+MUI8h6vYYHHMteJ+OszuBRBh6TiA64qnBNVa3XgsfPand80EAbDPbepHLMamDpyP6BQye43jp6i56ZJXIE9SeQhXdqzZqPaUaTfaawRdskbEbx5jbv8T2ll7dg2++fQoM+vW1n6mEcjR/SRcDf1kxVXk1SPpfQGsTSLkcjPiAsFVN+vwJkeJPbg==
+sidebar_class_name: "post api-method"
+info_path: docs/api/habits/habits-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Mark habit as completed"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/habits/{habitId}/completions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Mark habit as completed
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["date","completed","pomodoros"],"properties":{"date":{"type":"string","format":"date"},"completed":{"type":"boolean"},"pomodoros":{"type":"integer","minimum":0},"intensity":{"type":"integer","enum":[0,1,2,3,4],"example":2,"title":"IntensityLevel"},"note":{"type":"string"}},"title":"CompletionCreate"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Created","content":{"application/json":{"schema":{"type":"object","required":["id","habitId","date","completed","pomodoros"],"properties":{"id":{"type":"string"},"habitId":{"type":"string"},"date":{"type":"string","format":"date"},"completed":{"type":"boolean"},"pomodoros":{"type":"integer","minimum":0,"description":"Количество завершённых pomodoro сессий"},"intensity":{"type":"integer","enum":[0,1,2,3,4],"example":2,"title":"IntensityLevel"},"completedAt":{"type":"string","format":"date-time"},"note":{"type":"string","maxLength":500}},"title":"Completion"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

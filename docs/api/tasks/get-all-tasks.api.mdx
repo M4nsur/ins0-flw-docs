@@ -1,0 +1,71 @@
+---
+id: get-all-tasks
+title: "Get all tasks"
+description: "Get all tasks"
+sidebar_label: "Get all tasks"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVl9v40QQ/yrWPFZO4wYhHX4rOnQ6gXSROJ7aCm3tqbN39q5vd10aRZaaotMh3UPFK298gxIuEOi1fIXdb4RmnbhOUqCchIiixJ6/v5n5rccTMCzTEB/Ac6ZfajgKoWSKFWhQkXgCghUIMWjDTKUhBC4ghlcVqjGEoJMRFgziCZhx2ZgpLjIIAUVVUNgSRdpIuPi6VDJTqClMIosyR4MpXTORYJ5jSunxjJEG4g0Hw42XEs4vGzB1Hbb4SsWl4mb87xHm8hsIocCUVwWEMOLZaB2Hl9wBGK4yddMnzGAm1YPTd301MpWMHu55FIJCXUqhUZN+EEX0l6JOFC8NlxTm2ee+ycKgMKRlZZnzhJG2/0KTyWQ7BVOK+RIMFrojl8cvMDFAeV9VXGFKfeNp25Sw2/6WKaUsZCqVJCAKmcF0n2JUZbq8JrIpWaIyvKmEp/cOqp3EHtTtHLbtCi6+QJGZEcQfhVCws9XdIIq6UT6txkGmZIKK0tbheufuibsWKSKHCh8zcy+IE6kKZiAGKnIN/CAafNyLPulFvoqWMH9b8BCVloLl5NG2+D/hcmdcd/G5MJihanrLC8oRbbQL7A/21l7bhXtj527qLuzM3gb2V3tlZ3buzt137nt7Y2/cW/c6WKUI3NQbT+3C/tYteFC3/Pm/nildsv7TfHuGF+iPBUufiXwMsVEV1l2Of3CItpgPD1KvVwi1/2wO8AmagOV5YPwCIPaYkUwhhgzpuJaMiA/9lVqjOl3thkrlxCljyrjfz2XC8pHUJn4UPYr6rOT90z3YzPYYTzGXZYHCBE0ooAcaFycN8Tp4dbA/fAohULrGeW832o22Qu4Pnwb2nb12l4H71v7hzj33ru3c3tiFu2zI+M5euTf2yr63i8BNA2+2sLf06y7s3F0sdfT93V6RzP681F+SZvdQHIqdHfujnblLH9Kz2s4JZbyzcyh6wXDFb4LUW4Gyt+7CTT2gX+zCzryrBzZz53Zu3zdIAw/8J2/9NrA3BHoL+6Fojqo2BfMPq+UO2Rzi/Y80g2emX+aM+yh+epPlgA/ArF4AaIYkmEyOmcavVF7XJG4WE4095Zod09GKT1iuMYSXOO6+IpyyvKJ0QEvuL4w7C+Mh5p39+hDzdqXeGR/RjeJkDfHBUR3CCFmKylfUeO0nCZam47W1NClKez6efPYc6vpPQbV3Ow==
+sidebar_class_name: "get api-method"
+info_path: docs/api/tasks/tasks-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get all tasks"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/tasks"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get all tasks
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"status","in":"query","schema":{"type":"string","enum":["pending","in_progress","completed","cancelled"],"example":"in_progress","title":"TaskStatus"}},{"name":"priority","in":"query","schema":{"type":"string","enum":["low","medium","high"],"example":"high","title":"Priority"}},{"name":"category","in":"query","schema":{"type":"string"}},{"name":"search","in":"query","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","required":["id","title","priority","status","pomodoro","createdAt","updatedAt"],"properties":{"id":{"type":"string","example":"1"},"title":{"type":"string","minLength":3,"maxLength":200,"example":"Buy groceries"},"description":{"type":"string","maxLength":2000},"dueDate":{"type":"string","format":"date","example":"2025-09-01"},"category":{"type":"string","example":"Personal"},"priority":{"type":"string","enum":["low","medium","high"],"example":"high","title":"Priority"},"pomodoro":{"type":"integer","minimum":0,"description":"Количество завершённых pomodoro сессий","example":2},"status":{"type":"string","enum":["pending","in_progress","completed","cancelled"],"example":"in_progress","title":"TaskStatus"},"createdAt":{"type":"string","format":"date-time","readOnly":true},"updatedAt":{"type":"string","format":"date-time","readOnly":true},"completedAt":{"type":"string","format":"date-time","readOnly":true}},"title":"Task"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: delete-completion
+title: "Delete completion"
+description: "Delete completion"
+sidebar_label: "Delete completion"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9U8tu2kAU/RXrrlo0waTqIppd1CAVqQtUtStgMcFDsGrPODMDKrIshXbRBQu+oX9AaGhRE9JfuPNH1TWPUEE3XVSyZPs+zj1z5twcnLiywFvwSqdZIl2slYUOg0wYkUonDSVzUCKVwKEvLmPXiIBBrIBDJlwfGBh5PYiNjIA7M5AMbLcvUwE8BzfKqM06E6srKAq2Q4qEk/8Iw6CnTSrcFqUoOtRsM62stFT/ovaSXpG0XRNndCbgcCET6WRELI5mgu5OAWCQStfXEY0ok8DWLDmEpQY2zDdaFOFTnw1zYlQAAyvNcCvewCSknXMZD8NEd0XS19bxs9pZLRRZHA5P4ZDSUCY6S6VywRoK6JSx6ulSkNglpMjrkktw3mwAA5q37j6t1qq1A8zzZiPAO7z308B/xl/+Bmc4x3tc4AqXfhqUoSXO/cR/wZ84wwdcBvQ8+k9+XBZ+pzzO9hse8Zu/wYUf+zHOqm3VVpUKfsW5n+KPsnLlJ7ggirxSaauToKlTHWmjKRScbBn9fcic4PFhTTMoWd+W1ZMAVzjDu6PE2woKBpm2LhWKJNv47thd/yHTzm1OfnRhloi4RCrvMN+YoLVeBAsM+NNK7PmAEqU3Owzorqklzy+Fle9NUhQUvh5IMwLe6jAYChOLS7rQVg5RbOk7At4TiZUH7LpaOanI/M/ebhbmeQDsOOtNUKgR+UMkA/oDBh/kaG+baS3/49j10naKvSW7qL+pv6tDUfwGHBLQxw==
+sidebar_class_name: "delete api-method"
+info_path: docs/api/habits/habits-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Delete completion"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/habits/{habitId}/completions/{date}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Delete completion
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"path","required":true,"schema":{"type":"string"}},{"name":"date","in":"path","required":true,"schema":{"type":"string","format":"date"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"204":{"description":"Deleted"}}}
+>
+  
+</StatusCodes>
+
+
+      

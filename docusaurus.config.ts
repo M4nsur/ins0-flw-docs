@@ -3,11 +3,10 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  title: "Habits & Tasks - FSD Полигон",
-  tagline: "Документация экспериментального проекта на Feature-Sliced Design",
+  title: "Himma-flw ",
+  tagline: "Документация ",
   favicon: "img/favicon.ico",
 
-  // 👉 Правильные GitHub Pages настройки
   url: "https://m4nsur.github.io",
   baseUrl: "/himma-flw-docs/",
 
@@ -52,16 +51,20 @@ const config: Config = {
             outputDir: "docs/api/habits",
             sidebarOptions: {
               groupPathsBy: "tag",
-              categoryLinkSource: "tag",
             },
           },
-
           tasksApi: {
             specPath: "openapi/tasks-api.yaml",
             outputDir: "docs/api/tasks",
             sidebarOptions: {
               groupPathsBy: "tag",
-              categoryLinkSource: "tag",
+            },
+          },
+          pomodoroApi: {
+            specPath: "openapi/pomodoro-api.yaml",
+            outputDir: "docs/api/pomodoro",
+            sidebarOptions: {
+              groupPathsBy: "tag",
             },
           },
         },
@@ -73,7 +76,7 @@ const config: Config = {
 
   themeConfig: {
     navbar: {
-      title: "Habits & Tasks",
+      title: "Himma-flw",
       logo: {
         alt: "Logo",
         src: "img/logo.svg",
@@ -83,19 +86,14 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "tutorialSidebar",
           position: "left",
-          label: "📚 Документация",
-        },
-        {
-          to: "/docs/api",
           label: "🔌 API Reference",
-          position: "left",
         },
         {
           type: "localeDropdown",
           position: "right",
         },
         {
-          href: "https://github.com/M4nsur/himma-flw-docs",
+          href: "https://github.com/M4nsur/himma-flw",
           label: "GitHub",
           position: "right",
         },
@@ -105,42 +103,30 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "Документация",
+          title: "API Reference",
           items: [
-            { label: "🚀 Введение", to: "/docs/intro" },
-            { label: "🏗️ Архитектура", to: "/docs/architecture/overview" },
-            { label: "🔌 API Reference", to: "/docs/api" },
-          ],
-        },
-        {
-          title: "Frontend",
-          items: [
-            { label: "⚛️ Setup", to: "/docs/frontend/setup" },
-            { label: "🧪 Эксперименты", to: "/docs/experiments/overview" },
-          ],
-        },
-        {
-          title: "Backend",
-          items: [
-            { label: "🐹 Go Backend", to: "/docs/backend/overview" },
-            { label: "🔐 Аутентификация", to: "/docs/backend/auth" },
+            {
+              label: "🔌 Habits API",
+              to: "/docs/api/habits/habits-pomodoro-api",
+            },
+            { label: "✅ Tasks API", to: "/docs/api/tasks/tasks-api" },
           ],
         },
         {
           title: "Ссылки",
           items: [
             {
-              label: "GitHub",
+              label: "GitHub Docs",
               href: "https://github.com/M4nsur/himma-flw-docs",
             },
             {
-              label: "FSD Методология",
-              href: "https://feature-sliced.design/",
+              label: "Main Project",
+              href: "https://github.com/M4nsur/himma-flw",
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Habits & Tasks Project. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Himma-flw Project. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

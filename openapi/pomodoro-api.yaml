@@ -1,0 +1,279 @@
+openapi: 3.0.3
+info:
+  title: Pomodoro API
+  version: 1.0.0
+  description: |
+    API для управления Pomodoro-сессиями с техникой Pomodoro.
+
+    **Интеграция:**
+    - Может быть связано с привычками (Habits API)
+    - Может быть связано с задачами (Tasks API)
+    - Может быть без привязки (свободная сессия)
+
+    **Техника Pomodoro:**
+    1. Work (25 мин) → Short Break (5 мин)
+    2. Work (25 мин) → Short Break (5 мин)
+    3. Work (25 мин) → Short Break (5 мин)
+    4. Work (25 мин) → Long Break (15-30 мин)
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development server
+
+tags:
+  - name: Pomodoro
+
+components:
+  schemas:
+    PomodoroType:
+      type: string
+      enum: [work, shortBreak, longBreak]
+      example: work
+
+    PomodoroSession:
+      type: object
+      required: [id, userId, type, startedAt, duration, interrupted, createdAt]
+      properties:
+        id:
+          type: string
+          example: p1
+          readOnly: true
+        userId:
+          type: string
+          example: u1
+          readOnly: true
+        habitId:
+          type: string
+          nullable: true
+          description: Связь с привычкой (см. Habits API)
+          example: h1
+        taskId:
+          type: string
+          nullable: true
+          description: Связь с задачей (см. Tasks API)
+          example: "1"
+        type:
+          $ref: "#/components/schemas/PomodoroType"
+        startedAt:
+          type: string
+          format: date-time
+          example: "2025-11-15T10:00:00Z"
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2025-11-15T10:25:00Z"
+        duration:
+          type: integer
+          minimum: 0
+          description: Фактическая длительность в секундах
+          example: 1500
+        interrupted:
+          type: boolean
+          default: false
+          description: Была ли сессия прервана
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+
+    PomodoroSessionCreate:
+      type: object
+      required: [type]
+      properties:
+        habitId:
+          type: string
+          nullable: true
+          description: Привязать к привычке
+        taskId:
+          type: string
+          nullable: true
+          description: Привязать к задаче
+        type:
+          $ref: "#/components/schemas/PomodoroType"
+      example:
+        habitId: h1
+        taskId: null
+        type: work
+
+    PomodoroSessionComplete:
+      type: object
+      properties:
+        interrupted:
+          type: boolean
+          default: false
+          description: Завершить как прерванную
+      example:
+        interrupted: false
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+
+paths:
+  /pomodoro-sessions:
+    get:
+      tags: [Pomodoro]
+      summary: Get all pomodoro sessions
+      description: |
+        Получить список всех Pomodoro-сессий пользователя.
+        Можно фильтровать по привычке, задаче или периоду времени.
+      parameters:
+        - name: habitId
+          in: query
+          schema:
+            type: string
+          description: Фильтр по привычке
+        - name: taskId
+          in: query
+          schema:
+            type: string
+          description: Фильтр по задаче
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Начало периода
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Конец периода
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PomodoroSession"
+              examples:
+                habitSessions:
+                  summary: Сессии для привычки
+                  value:
+                    - id: p1
+                      habitId: h1
+                      taskId: null
+                      type: work
+                      startedAt: "2025-11-15T10:00:00Z"
+                      completedAt: "2025-11-15T10:25:00Z"
+                      duration: 1500
+                      interrupted: false
+                taskSessions:
+                  summary: Сессии для задачи
+                  value:
+                    - id: p2
+                      habitId: null
+                      taskId: "1"
+                      type: work
+                      startedAt: "2025-11-15T11:00:00Z"
+                      completedAt: "2025-11-15T11:25:00Z"
+                      duration: 1500
+                      interrupted: false
+
+    post:
+      tags: [Pomodoro]
+      summary: Start pomodoro session
+      description: |
+        Создать новую Pomodoro-сессию.
+
+        **Примеры использования:**
+        - Для привычки: `{ habitId: "h1", type: "work" }`
+        - Для задачи: `{ taskId: "1", type: "work" }`
+        - Свободная: `{ type: "work" }`
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PomodoroSessionCreate"
+            examples:
+              forHabit:
+                summary: Для привычки
+                value:
+                  habitId: h1
+                  taskId: null
+                  type: work
+              forTask:
+                summary: Для задачи
+                value:
+                  habitId: null
+                  taskId: "1"
+                  type: work
+              free:
+                summary: Свободная сессия
+                value:
+                  habitId: null
+                  taskId: null
+                  type: work
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PomodoroSession"
+
+  /pomodoro-sessions/{sessionId}:
+    get:
+      tags: [Pomodoro]
+      summary: Get session by ID
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PomodoroSession"
+
+    patch:
+      tags: [Pomodoro]
+      summary: Complete pomodoro session
+      description: |
+        Завершить Pomodoro-сессию.
+        Автоматически рассчитается фактическая длительность.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PomodoroSessionComplete"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PomodoroSession"
+
+    delete:
+      tags: [Pomodoro]
+      summary: Delete session
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted

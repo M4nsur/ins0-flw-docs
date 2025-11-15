@@ -1,0 +1,73 @@
+---
+id: complete-pomodoro-session
+title: "Complete pomodoro session"
+description: "Завершить Pomodoro-сессию."
+sidebar_label: "Complete pomodoro session"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVs1u20YQfpXFnGyDkiinBgLeHLdAghaIkbgoUFuHtbiWGJNcZrl0YggEIqdJCsSI217aQy8t+gCMGjeuHamvMPsKfZJilvqzJKcx0kMNAZbIb372m9lvpgOat1LwtmFTRtKXSkLDAV+kTRUkOpAxeIA/YoE9PDVPzLd4Zo7MMRuBK6aLp6ZrunhmXlV3YvwOe+YIB/gOC3OEZ+YFvcZzPGPmCRaENC/IBxZ4ao5M15ww8w0WeH4JXZgThm/wwiJP8cIcYx8HpkuxqzsxOJBwxSOhhaLcOxDzSIAHqUjTQMZ3fHAgoNQTrtvggBIPs0AJHzytMuFA2myLiIPXAX2YWEOtgrgFed4owSLVt6R/SIhZ26aMtYg1veJJEgZNTjTVHqTEVWfetdx9IJqaUlYyEUoHIqW3QayFUlmiyfMYvCtlKDgd0Bd7PAs1eHs8TMUHlIRow3OGf5kn9Bx7WGAf++apeQV57oB4zKMkFHOxrf/cAR1oejvug/sllxuSrLSAPCcvSqSJjNPyDKuuS/8up3b3c/gIkiZsb0NAZcxSoWw9LdKBVHOlhb9OYD9T1q+t9uRIDjSV4CWoMce7P1/2KXIgqdssuH83Dg/LmufjLN5rmS20bPPdQC82jbMw5LtkW3bWTIl/wZ45wbfmmJluWdYz7JmX5gWe4wD/ZEumi++q7DYFSNn65p3lS+m060BV5en+fxD9LRb4Bgu6oJPIWzzdXxC4jGujLaArziKq7SOp9qmaban0LSU4/Qhl3Cq/N6b9DaGz/blFnvPphlgQbk+qiGvwwOdaVHQQiUuprrqra5V6vVJf26q7nkufr8lnc9j01/E6y+dVUVbXRlHG7TsJQW3cEgociII4iIgrd640v11LLxn2GKk0npun2LdVfDZNQn3NdXPnY/Xoe/MSL7BglAObGgons4JUWH7H9/ND2Z25V1frldWp3IFI6Lb0yxHQbNuJodvgQS0Zja7hsEhrnfHYyKklhToYjZVMhXSTtE68Wi2UTR62Zaq9m+5Nt8aToHZQh1kmPhUHIpRJJGLNSldAQ4WU795ksHz2L2IcxHvScjNzSLpt4AAlWIarV92qO5fE+uYd2w80XZ/aAtC0uMBT7NuaLBrfJ/jOlo5RC5lnhBwKzQhd3Yl34pUV/An7ts1+tyP9Odl6Kys7cYXhzzjAP2iyM3xtXtr2M91SSWz1Bwu0rLCBl6Z07BquJsI0dDMRpau84Gs8xbeTLMghLSikaj0c4Gsc4BvqVGJvip/l4fF/naKnGJNjGahX2VdS7bOl1TVG6WB/mf39/Ad2n2SOWW1jS+NXO/HqNfE3ron/5Ar8FzJujeD1tcoNd2JC1zORqY641aXhYjXaAtjo9rDhnZltvc5k9P8v98ah2GjxWNeSkAf2vPaad4YKsQ1zCgEOeJPVsuEAqQAhO51dnoovVZjn9PhhJtQheNsNBw64CsppsN0BP0jpu79YPKcpW7o33H+W2VXJDh/y+JCEgIcZ/QIH9sXhpQ04b9D2IbgvlE2ifL9RhqpsldvUyH5uScudkcV6sykS/V5sY0puN9e3Nm6DA7vD9TmSPhkp/ohUnD8qk5X27HYhs886EPK4lfEWYUun9PcPgcBkGw==
+sidebar_class_name: "patch api-method"
+info_path: docs/api/pomodoro/pomodoro-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Complete pomodoro session"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"patch"}
+  path={"/pomodoro-sessions/{sessionId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Завершить Pomodoro-сессию.
+Автоматически рассчитается фактическая длительность.
+
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"interrupted":{"type":"boolean","default":false,"description":"Завершить как прерванную"}},"example":{"interrupted":false},"title":"PomodoroSessionComplete"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object","required":["id","userId","type","startedAt","duration","interrupted","createdAt"],"properties":{"id":{"type":"string","example":"p1","readOnly":true},"userId":{"type":"string","example":"u1","readOnly":true},"habitId":{"type":"string","nullable":true,"description":"Связь с привычкой (см. Habits API)","example":"h1"},"taskId":{"type":"string","nullable":true,"description":"Связь с задачей (см. Tasks API)","example":"1"},"type":{"type":"string","enum":["work","shortBreak","longBreak"],"example":"work","title":"PomodoroType"},"startedAt":{"type":"string","format":"date-time","example":"2025-11-15T10:00:00Z"},"completedAt":{"type":"string","format":"date-time","nullable":true,"example":"2025-11-15T10:25:00Z"},"duration":{"type":"integer","minimum":0,"description":"Фактическая длительность в секундах","example":1500},"interrupted":{"type":"boolean","default":false,"description":"Была ли сессия прервана"},"createdAt":{"type":"string","format":"date-time","readOnly":true}},"title":"PomodoroSession"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

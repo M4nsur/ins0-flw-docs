@@ -1,0 +1,71 @@
+---
+id: get-session-by-id
+title: "Get session by ID"
+description: "Get session by ID"
+sidebar_label: "Get session by ID"
+hide_title: true
+hide_table_of_contents: true
+api: eJytVs1u20YQfpXFnGyDskilAgLeXKRIjRZI0DgoUFuHlbiWGJNcZrl0IwgEIgdJDjZgtKceemnRB5Bdq3btSH2F2VfokxSz+v9xUQMVBIjkznzz8duZT9sBzZsZ+PvwXMYykEpCzYGUKx4LLRStdCDhsQAfMpFloUx2A3AgTMCHlOsWOKDE6zxUIgBfq1w4kDVaIubgd0C3U5uoVZg0oShqFJylMslERusV16WfQGQNFaY6lIT67CtwoCETLRJNqzxNo7DBabX8KqOQzmoJWX8lGnqBzD6ExDTPhLKUbaQDmeZKi2CHgoNcWVz7QlooladaUGxDCT4KIjWUTIXS4YhzGKy+mQPiDY/TiB6lnmXBg2dJ1B5JUkxZ/GtmvjazxeuhXp+a5FHE65Q7En5RR/wFL805XpszZroM/zJv8QYvzan5iLc4xD/Zhunip232JRXI2M7z3c0FOi0PCgc0z47+h+rX2MMr7JmP2J9V3uPZ0ZrCo7q22hq5kjymvf1eqiPazZZU+nMlON1EMmmOrmvzeONQHWp7O2n0PUIu5htiTblDqWKuwYeAa1HSYSwWqFbcSrXkeSWvuue5vkvf7wizISngYajLet5XpVKdVJm276wEtXFTKHAgDpMwJq3cla35DXt4a07whrbDdPEWe+ac4RXe4Y05wT7emTMc4NB0zYk5Y3jJTBf7eGve4cDu4vt5Ebyq6xaLAzTjU5cyEpwGLBCHPI80+Ic8ylbb5QdzinfYY8TBljNd08Ub4kWd2zdv8RJ7OMCe1Xc6n/9V3aW5Klb74cXI3qCgzzK/p0Kzsf+xepvtPiGFhW7JAHxoCjIT64Y+lNMxXmkcn5U7U+csqGWFOp44a64imjStU79cjmSDRy2Zaf+x+9gt8zQsH3uwzOSJOBaRTGORECOCAvLVMDmUVoylt6LxAgeo4ijf23a33RXUnee7tgHMOTPvrOI9vMQ77OPAbsIErjS/NfjJ7hWjnjHvKXLsLJPo7YPkINnawp9wYPvqd8I1HyjX39o6SEoMf8Yh/oF9c8LwwpzafjPdkXXY7R6uMa+eLbwxZ1wPgJo50Rhm5kL3oeAF9vF6xoIAbymV4HGIFzjEK2pNUm9On83x6/86J09vKo5VwNtm30p1xDYqVUZ0cLDJ/v7wI3tBvsasmbGN6dJBUnlg/KMHxn92T/zXMmlOwr1q6ZE7S6F5TGWmY26NaHxYWDcwCy03nVst3uhyGvHQItmJ6IyHaR9Whgkc8GcHkZoDNDAU2enUeSZeqqgo6PHrXKg2+Ps1B465CkfGut+BIMzoOljvQ53ZwQM2vhkfJTbZ5PSwTHb8kCdtGjEe5XQHDhyJ9sJ5qajRH7nggVCWxGh9p9EQqZ7LXDnp0GBPXebpF3tQFP8AWhPwjw==
+sidebar_class_name: "get api-method"
+info_path: docs/api/pomodoro/pomodoro-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get session by ID"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/pomodoro-sessions/{sessionId}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get session by ID
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"sessionId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object","required":["id","userId","type","startedAt","duration","interrupted","createdAt"],"properties":{"id":{"type":"string","example":"p1","readOnly":true},"userId":{"type":"string","example":"u1","readOnly":true},"habitId":{"type":"string","nullable":true,"description":"Связь с привычкой (см. Habits API)","example":"h1"},"taskId":{"type":"string","nullable":true,"description":"Связь с задачей (см. Tasks API)","example":"1"},"type":{"type":"string","enum":["work","shortBreak","longBreak"],"example":"work","title":"PomodoroType"},"startedAt":{"type":"string","format":"date-time","example":"2025-11-15T10:00:00Z"},"completedAt":{"type":"string","format":"date-time","nullable":true,"example":"2025-11-15T10:25:00Z"},"duration":{"type":"integer","minimum":0,"description":"Фактическая длительность в секундах","example":1500},"interrupted":{"type":"boolean","default":false,"description":"Была ли сессия прервана"},"createdAt":{"type":"string","format":"date-time","readOnly":true}},"title":"PomodoroSession"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

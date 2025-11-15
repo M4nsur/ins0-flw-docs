@@ -1,0 +1,77 @@
+---
+id: start-pomodoro-session
+title: "Start pomodoro session"
+description: "Создать новую Pomodoro-сессию."
+sidebar_label: "Start pomodoro session"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV1FrG0cQ/ivLPDnmZOmcGsK9OWmhhkJM7VKoJchaWksX391e9vacGCGwHJI8OMS09KEPhZDSH6C4Ua3akfIXZv9Cf0mZvTtLlmQTp6FPFQbrdDPfzM58891cGzRvJuBtwboMZUMqCTUHGiKpKz/WvozAA3yDIzzFd9gzh+YlwyGO8MQ8Na9Y4VMyXeybruniwLxaqkbVaHERX5sDHOB77JsDc8RwYLr4AUd4bl7iKSFgD4c4MMfe4mI1KjH8Gc/NMcMP1u3EHJkXeIYDjz1osxbf9vVaw2NVaLlVcJjejwVdPZZqtwqs82AS4RR7NtkXubfmyW7mfI3vGzzBEb7FEb7DIfbMceY6awsOKPEoFYm+Kxv74LXtpa9EAzytUuFAXUZaRJpu8TgO/DqnQpYfJlTNNiT1lgg5fSN08EBuPxR1neNmQFvZvZoDsZKxUNoXCXnkhZhwTrTyoyY4EKVBwLcDUWQx1cPXeVmPqTxZH8+mi92HjgNZtT5bhHEzMnSLOYstojSkY1OhwYGkJZW+qwSni0BGzex7zQHxhIcx5VCYal/by4KLm4Tc6UxYTpQNWi6Mj0gHKlLK4DqzeBsiSXwZ3VOCawFjXNuPHam+Jmzb1zQMudqnUsynMjiwx4P0hhl1HIqyyZPd+UEm2D43QA6ZBwAbbRpfCTEFPjMObGLEjz8i0LyT0IdYnsQySrICLldc+neZSlmtG/CZRsknpDQRaq1RHN6BRHOlRWOVjBupsrjggB9poVQa5+GzRFb17CT6c0dkzM7YtVnwxv0o2M8mpnORxbWe6VzPT5/8N9lMmpfMdKc5OcK/2ILp4vslZnmcsNX1tVuX0mm5/0oVLkefUINxZOL2nMDuf6kXk4SYE25HqpBr8KDBtShpPxSXUl2uLK+UXLfkrmy6Fa9Cfz8QZl2Swc1Qp+t5VZTllSLKBX3HIYjGTaHAgdCP/JBqVZlpze/YwzNziANqh+nimZ1zfIfnODCH2LeP6iGOTDdT8xOrAXhmnuLQdvHZZBHclUqlc3mAxvlsSxkITgPWEDs8DTR4OzxIZunyoznCc+wxyuGS5GTM7ZuDfHHo2fpezOfHVndqrq7We8jVKhS6JUk4Y5mQVsRct8CDclysPklmnxALhdoTirapNqQqoOHROvbK5UDWedCSifbuVO5Uyjz2y3suTB/+S7EnAhmHItIsg4JOzQESu2/HG8dXn/ZY86Mdaas0dVyaO5JzoZIsC3epslSZyW11fc0ygx4ET20reniC59jPdri5m+AxvrdNZEQm84wsc8kprItV8RccWsL9Qbjm+eRW+CuO8E/sm0OGb82RJaLpFlsGsXOOqvVs4IUJRbsB1FiicpixPF2Fgm+xj6fjLAjwjFwJ/prH6K38+L9NlKd3URxbAXeJfS/VLltYXmGUDg5vsb+f/8Q2SPCYVTm2cHGrGi3f0P72De2/uML+Gxk1C3N3pXS7MnYh9tHwhNwqVMRD4t8GyS0rpojlUzTNu/Z4A/j/NWT6NSSfcC2e6HIccN9W2upOO5epLZiVqZoDpER0s93e5on4TgWdDv38KBW0/G3VaLtTfvYQ2qrR8iF4Qyira7uC9sN7WVdKm9kylS+Dsztaxyk8Vut1EetrbWsTart+f2MTHNjOX7FC2SAfxR+ThvPH4AE4IC1L7Dpmf2tDwKNmyptkm2HS5x+4iEkN
+sidebar_class_name: "post api-method"
+info_path: docs/api/pomodoro/pomodoro-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Start pomodoro session"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/pomodoro-sessions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Создать новую Pomodoro-сессию.
+
+**Примеры использования:**
+- Для привычки: `{ habitId: "h1", type: "work" }`
+- Для задачи: `{ taskId: "1", type: "work" }`
+- Свободная: `{ type: "work" }`
+
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["type"],"properties":{"habitId":{"type":"string","nullable":true,"description":"Привязать к привычке"},"taskId":{"type":"string","nullable":true,"description":"Привязать к задаче"},"type":{"type":"string","enum":["work","shortBreak","longBreak"],"example":"work","title":"PomodoroType"}},"example":{"habitId":"h1","taskId":null,"type":"work"},"title":"PomodoroSessionCreate"},"examples":{"forHabit":{"summary":"Для привычки","value":{"habitId":"h1","taskId":null,"type":"work"}},"forTask":{"summary":"Для задачи","value":{"habitId":null,"taskId":"1","type":"work"}},"free":{"summary":"Свободная сессия","value":{"habitId":null,"taskId":null,"type":"work"}}}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Created","content":{"application/json":{"schema":{"type":"object","required":["id","userId","type","startedAt","duration","interrupted","createdAt"],"properties":{"id":{"type":"string","example":"p1","readOnly":true},"userId":{"type":"string","example":"u1","readOnly":true},"habitId":{"type":"string","nullable":true,"description":"Связь с привычкой (см. Habits API)","example":"h1"},"taskId":{"type":"string","nullable":true,"description":"Связь с задачей (см. Tasks API)","example":"1"},"type":{"type":"string","enum":["work","shortBreak","longBreak"],"example":"work","title":"PomodoroType"},"startedAt":{"type":"string","format":"date-time","example":"2025-11-15T10:00:00Z"},"completedAt":{"type":"string","format":"date-time","nullable":true,"example":"2025-11-15T10:25:00Z"},"duration":{"type":"integer","minimum":0,"description":"Фактическая длительность в секундах","example":1500},"interrupted":{"type":"boolean","default":false,"description":"Была ли сессия прервана"},"createdAt":{"type":"string","format":"date-time","readOnly":true}},"title":"PomodoroSession"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

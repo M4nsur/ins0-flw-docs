@@ -4,40 +4,40 @@ const sidebar: SidebarsConfig = {
   apisidebar: [
     {
       type: "doc",
-      id: "api/tasks/tasks-api",
+      id: "api/pomodoro/pomodoro-api",
     },
     {
       type: "category",
-      label: "Tasks",
+      label: "Pomodoro",
       items: [
         {
           type: "doc",
-          id: "api/tasks/get-all-tasks",
-          label: "Get all tasks",
+          id: "api/pomodoro/get-all-pomodoro-sessions",
+          label: "Get all pomodoro sessions",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "api/tasks/create-task",
-          label: "Create task",
+          id: "api/pomodoro/start-pomodoro-session",
+          label: "Start pomodoro session",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "api/tasks/get-task-by-id",
-          label: "Get task by ID",
+          id: "api/pomodoro/get-session-by-id",
+          label: "Get session by ID",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "api/tasks/update-task",
-          label: "Update task",
+          id: "api/pomodoro/complete-pomodoro-session",
+          label: "Complete pomodoro session",
           className: "api-method patch",
         },
         {
           type: "doc",
-          id: "api/tasks/delete-task",
-          label: "Delete task",
+          id: "api/pomodoro/delete-session",
+          label: "Delete session",
           className: "api-method delete",
         },
       ],

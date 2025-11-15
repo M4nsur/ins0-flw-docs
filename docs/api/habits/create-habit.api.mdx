@@ -1,0 +1,71 @@
+---
+id: create-habit
+title: "Create habit"
+description: "Create habit"
+sidebar_label: "Create habit"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVt1u2zYUfhXhdFcBHcvpurS6y5oGC7CiwZZhF44H0NKxxUYiVYpKYhgCmvWiF7nIM+wNsqzZgrXpXoF6o+FQ/lEcJ82K3swwYIr+zuHHw+871BgMH+YQdOE73hcmhx4Dja8KzM23KhpBMHaPQmMEgdEFMgiVNCgN/cWzLBEhN0LJ9stcSZrLwxhTTiMzyhACUP2XGBpgjURdkDxFYDBwa8lwBAxyw7XZ5Ibmh4onm3zk6GRaZaiNwJySusB58txoIYfAIOVH36McmhiCju+XDCLMQy0y4vYJ/COHn1NZgkZZpEQ74iIhroeI+24QFrlRKdHEI55mCUVNQUYY97w1zbxLWUsqRCpkhPqZ5P2E6jFbsK9UglwC0R/wIjEQDHiSYyNoVywvwEDplBsIwBCgZGC4HqKhKu6g/hlxvxElpMEhaoLlGYZiIEJX7jmCa81pE8Jgmi+LLJsndhefiABl40yX0ghVovTNPLTMtI5OoU81unxl6WqSZ0rmtTLW/A79XDt3qOERfCHZCspU5Ki3abBExItHe4usGYQ1sQ1aociiyfiG3EW0VI4zrcUdKt6E0Z3IwiHvZ59m3HOlpZBD7zlGwriawf/dXf/ZTc31/fXgoX9ffzFIhRQpba/jqlKP1z/fd3dknHHsdthD9qj3JR3aXLZkwHUYi4P7tq5bvM0g48agJp/+8qDrt55stLZ4a9Abf1N+da3mD7a2Ntd9V/VMq6HGvMlRFmnfUZxtaJAobpqc/UapnL418uiFTEb1pVY2/fipSrUmkriRYm7jz0yx2Otcl1s026SlebFDMEjRxCqCADKVm7qmMQTQjuv7nEGO+gA13fFjKHRCTcOYLGi3ExXyJFa5CR77j/02z0T7oAOLy23iASYqS1Ear04FZY8B9c0f5i8Kz6ZnNb2h5zu/nm5ekHlHmHn6hnWdghbdOs+xxIL+orO6fu+aD2DNX/u65a+31p40OzIFTnQ6u3sYCDlQ7jSbx5J7GzvbwICqWm+qs+qv+je2urGz7dl39n116lVv7D/Va3tmz+17e2Gv7GV16rmpS3tenVRv7d/2zH6wlx59P1a/VscO+Cf9b8+aAR/tH9Vre1EdV8f2bHVP7smVFfubPa9O7V8OeVWd2AuiGKys7MmWt6NSFSmtaMprTRndvsg5pbcfapqeY/27Q5949sqe2XdLie+5tkoaTLlsyGBBrcvvDYNHpp0lXLgkTqTjiZC7EM9eTEmrNDMe93mOP+mkLGn6VYF6BEG3x+CAa0HSoaeSQYw8Qu2Uv48ktKf1S0DL3RUETwrXdBdfCEo2jdgIQ8zMndhew4Q7L37cBQb9ybtzqiKK0fyQ1M0PIQBgoNz+XQtzc2NIuBwWfEjYOid9/gXZDTO0
+sidebar_class_name: "post api-method"
+info_path: docs/api/habits/habits-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Create habit"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/habits"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Create habit
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["name","frequency","startDate","goalDays"],"properties":{"name":{"type":"string","maxLength":100},"description":{"type":"string","maxLength":500},"frequency":{"type":"string","enum":["daily","weekly","custom"],"example":"daily","title":"FrequencyType"},"reminderEnabled":{"type":"boolean","default":false},"reminderTime":{"type":"string","format":"time"},"targetDaysPerWeek":{"type":"integer"},"specificDays":{"type":"array","items":{"type":"integer"}},"startDate":{"type":"string","format":"date"},"goalDays":{"type":"integer"},"color":{"type":"string"}},"title":"HabitCreate"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Created","content":{"application/json":{"schema":{"type":"object","required":["id","userId","name","frequency","reminderEnabled","startDate","goalDays","createdAt","updatedAt"],"properties":{"id":{"type":"string","example":"h1"},"userId":{"type":"string","example":"u1"},"name":{"type":"string","maxLength":100,"example":"Morning Meditation"},"description":{"type":"string","maxLength":500},"frequency":{"type":"string","enum":["daily","weekly","custom"],"example":"daily","title":"FrequencyType"},"reminderEnabled":{"type":"boolean"},"reminderTime":{"type":"string","format":"time","example":"07:30"},"targetDaysPerWeek":{"type":"integer","minimum":1,"maximum":7},"specificDays":{"type":"array","items":{"type":"integer","minimum":1,"maximum":7},"example":[1,3,5]},"startDate":{"type":"string","format":"date"},"goalDays":{"type":"integer","minimum":1},"archived":{"type":"boolean","default":false},"color":{"type":"string","pattern":"^#[0-9A-Fa-f]{6}$","example":"#FFD700"},"progress":{"type":"number","format":"float","minimum":0,"maximum":100,"readOnly":true},"createdAt":{"type":"string","format":"date-time","readOnly":true},"updatedAt":{"type":"string","format":"date-time","readOnly":true}},"title":"Habit"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,71 @@
+---
+id: get-habit-statistics
+title: "Get habit statistics"
+description: "Get habit statistics"
+sidebar_label: "Get habit statistics"
+hide_title: true
+hide_table_of_contents: true
+api: eJx9lM9O20AQxl/FmlMbbXHoCfmGSkVRD0XQniCHjT0kC/au2Z2kjSxL0B564MAz9A1SCi0qf/oK6zeqxg4hkEAUKc7Ob2e+9Xw7BZDsOYh2YJskKUcqdtARkEsrMyS0HCtAywwhgr7sKtpIQIDSEEEuqQ8CLB4OlMUEIrIDFODiPmYSogJolPM2R1bpHpRlh2GXG+3Qcfx1u80/CbrYqpyU4awf3oOA2GhCTRyVeZ6qWHI03HeMFPMlTHcfYwIBuTU5WlJNgTvB81oExANrUdM2WZQHM4TShD20jKRG99A9i5Ahmb4xWZ4iK3TPUJsmM4mx5glGDtHKHk6pTbRrcjTD6kHWbdB4Wm9LEi5EPiMepKPVJudCIjOa+s8jqXQ0ORsmaw9LTV6kgD1jM0kQQcJAyadVlDLClnJQ8kc8avI6UlA3J3D3vhOQIfVNAhH0sG4mGyyCsCZdWEzaWYauzizAoR3eeXRgU7YoUR6FYWpimfaNo2ilvdIOZa7C4TI8VrGGQ0xNnqGmoEkF7FGl90x90sk53tXlg9XNDRDA9Zrdy0vtpfZcztXNjcCf+6vqNKi++X/VkR/7M3/lL/yNv6xOg3rp0p9VJ9V3/9eP/bW/DPh7W32tjmvwN8f9eHbDrf9VHfmL6rg69uOlXb2rWy3/w59Vp/5PTd5UJ/6CJUat1q5+FdzZiJeCV3eKni5yxun9dSMzqFX/rOmTwN/4sT9fKHxXs01y4yiT9cWcDIon2vvgTU2dRPiFwjyVqk5Wt7GYtH6nucG8N7ofPk33OwK4wQwVRVc6/GTTsuTlwwHaEUQ7HQFDaZXschd3CkiU4+cEoj2ZOpzTMx068GJrMtNeBiAW65wsSj1iU8h0wP9AwAGOZiZl2SkF9FEmaGsJTXQ1jjGnmX1zM45tOL0M628/Qln+B9ngOL4=
+sidebar_class_name: "get api-method"
+info_path: docs/api/habits/habits-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get habit statistics"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/habits/{habitId}/stats"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get habit statistics
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object","properties":{"habitId":{"type":"string"},"currentStreak":{"type":"integer"},"longestStreak":{"type":"integer"},"totalCompletions":{"type":"integer"},"totalPomodoros":{"type":"integer"},"averagePomodorosPerDay":{"type":"number"},"completionRate":{"type":"number"},"weeklyAverage":{"type":"number"},"monthlyAverage":{"type":"number"},"lastCompletedDate":{"type":"string","format":"date"}},"title":"Stats"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

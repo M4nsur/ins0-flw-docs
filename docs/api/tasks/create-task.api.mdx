@@ -1,0 +1,71 @@
+---
+id: create-task
+title: "Create task"
+description: "Create task"
+sidebar_label: "Create task"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVlFv2zYQ/ivCPQZyLHsb1uotbfdQYECNNXtKgoGRLjZbiVRJKothCEgyDB3Qh6Cvfds/yLJ685Ym+wvkPxqOsmw5NlKsGLAZhk2Rx+++43131AQMG2qI92CX6ZcaDkJQ+KpEbR7JdAzxxD9yhSnERpUYQiKFQWFoiRVFxhNmuBTdF1oKmtPJCHNGIzMuEGKQhy8wMRC2gPbAcJMhhFAoLhU3YxrKXKZSSaJQKFmgMhy1B/LGS0RtFBdDCCHn4msUQzOC+LMqhBR1onhBdNatab3EJ8xsRDqSKmcGYkjJoAohYQaHUo03Ai1Yb0BCUeYUYSa/J4aY8jKHEEZ8OKLI8ITlBUVTz4RNcDBoMKvWUSzxuTA4RFUHzXPyEVHER6zMDMRRFYI2zJT6Pk4FirSe4eK7QsmhQq2BUkqcDKY0ZiLBLMN0le3qhoY0aeZ57bZFZuGnqlZNHyv0x1vRgkJdSKHrFPejHv2tZBBqc0/q39AcTxfMV4SnmwAWxx5CUrveIYyySOfjNWXydONxL06tB8sTuF++IeTspHnqR1Eb5VE5DoZKJqjI7ceEfhcp+ifKb7vtR/0vOtHDTtS7vyDaewaotBQs+59VSVtV9p29tdd25l7bqTtz5/bK3gb2d3tpr+zUnbqf3Ft7Y2/cG/dj0LgI3Jk3PrMz+0c74P5/XndVW6wfy2/H8Bx9WbD0mcjGdU+v2hr/ZIhFMJ8Ocqdd+EZxV+7zrhAYMiDpmJFMqedITcVaMJI9dI2/zULQqI5R0QU3gVJlpChjirjbzWTCspHUJn4QPYi6rODd4x7cdfYEjzGTRY7CBDUUVAchUOP5ZnlNftWka3FXLeNexVtONxVJZfZ5J/qy038I7Spbmi7rqKmGpfKjpfxWpFKR1I5km5G/34OdwVMIgY6kJtTbjrajNZo7g6eBfW+v3UXgfrB/uVNfHdd2am/szF3U5fLeXrrX9tJ+sLPAnQXebGZv6ded26k7n6/R9097SXP21/n6Ba1s74t9sbVlf7ZX7sJD+rqzU2IZb23ti04waCqQKHUaUvbWnbszT+g3O7NXfqsnduVO7dR+qJkGnvgv3vpNYG+I9Br3fVE3E21y5tupYDmu6WxzyzV4YrpFxrjH8PqazCW4B6Z5oSKV0cRkcsg0fquyqqLpVyVSovcOQjhmirNDStPeQRXCCFmKymv2JVLeH9f3X2eX3JJ5VpL7tbuwCpsdO0mChbnX9qBVPYNnz3chhMP5O18uU9qjGHVn+o0BQpA+fN/p/NwEMiaGJRuSbY1Jn78B+v3aHQ==
+sidebar_class_name: "post api-method"
+info_path: docs/api/tasks/tasks-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Create task"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/tasks"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Create task
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["title","priority","pomodoro"],"properties":{"title":{"type":"string","minLength":3},"description":{"type":"string"},"dueDate":{"type":"string","format":"date"},"category":{"type":"string"},"priority":{"type":"string","enum":["low","medium","high"],"example":"high","title":"Priority"},"pomodoro":{"type":"integer","minimum":0,"default":0},"status":{"type":"string","enum":["pending","in_progress","completed","cancelled"],"example":"in_progress","title":"TaskStatus","default":"pending"}},"title":"TaskCreate"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Created","content":{"application/json":{"schema":{"type":"object","required":["id","title","priority","status","pomodoro","createdAt","updatedAt"],"properties":{"id":{"type":"string","example":"1"},"title":{"type":"string","minLength":3,"maxLength":200,"example":"Buy groceries"},"description":{"type":"string","maxLength":2000},"dueDate":{"type":"string","format":"date","example":"2025-09-01"},"category":{"type":"string","example":"Personal"},"priority":{"type":"string","enum":["low","medium","high"],"example":"high","title":"Priority"},"pomodoro":{"type":"integer","minimum":0,"description":"Количество завершённых pomodoro сессий","example":2},"status":{"type":"string","enum":["pending","in_progress","completed","cancelled"],"example":"in_progress","title":"TaskStatus"},"createdAt":{"type":"string","format":"date-time","readOnly":true},"updatedAt":{"type":"string","format":"date-time","readOnly":true},"completedAt":{"type":"string","format":"date-time","readOnly":true}},"title":"Task"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

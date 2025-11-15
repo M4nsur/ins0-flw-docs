@@ -1,0 +1,71 @@
+---
+id: get-completion-history
+title: "Get completion history"
+description: "Get completion history"
+sidebar_label: "Get completion history"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVM1u20YQfhViTq2xNmm3BQLejKZIjAaoUbQnW4cVOZY2IXeZ3ZVhQSBgJyhSwAej1976BqoaN0odu6+w+0bFLEVRlmXkUMGA5J2/b76Z+SZg+cBAegTfqrIq0AolDfQYVFzzEi1qMk5A8hIhhSHvC3uQAwMhIYWK2yEw0Ph6JDTmkFo9QgYmG2LJIZ2AHVcUZqwWcgB1zZaZjOXaPuUW21yvR6jH8HgwgxOlS24hhZzCVpOhzP9fqh41YSolDRry30sS+srRZFpURAqk8MP3wCBT0qK0ZOVVVYiMkzV+achl8rAk15oTFmGxNCvvqv8SM3uPvCMQxGzHcd70lDWTQXqqVKlypVUzI60q1FY0mEW+gfEu3SZbKPB5elYhdN59pQrkkswdqs4spMUBamBQCinKUQlpwtYYdb+7O3fj5v6du/YX/o2bubvIfXBTN3PX/tz/6n9zt+7WX/pforZG5C+C84Wbu49UnApJI+x4Y3GUVPkoYbtsj33Fvu4xwDNO3UC6x8AKS7/goE3yAk+xuNfyvv0sRdtWlIEnqTYTWvKzFygHdgjpN0lS113h7uygDp91jp6hjbKlUzQUxqqw3SXaocohhQHSHoVbTCEO8zbxZDH3Os5WDpuBQX3aHvVIF3TT1lZpHBcq48VQGZs+SZ4kMa9EfLoL62ieEj2qKlHaqEkFdDxCnqjQ96Kr5wFEtH94AAyoXhO9u5PsJA9y7h8eRO69u/FXkX/r/vXnYf437trdurm/isLT3M38pX/n/nFT98nNI/q782/8RXD8m+xuuhpw5/7y54tNme4cy2O5teX+cDN/FRYsrJW7Jojp1tax3I4O2wUjPNstoseLzCi9+9TAjALqP4P3ZeRu3dS93wj8eHEwxpY8KMZCwh4d8z2ulptl8czGVcFFSBcGOVmswFFz8jTstNOS7L6806DJdTLpc4M/66Ku6blRTtqNXBjeL+jgT3hhkMErHK/J9ikvRoQFSIkf8e+UufPu0T9akPvmUmstLyUXvvhxIZZfRsA2U9HKrhyv1mzhtHzUPVJG5DnqAKGx7mcZVnYl7oHCE/bl3T377ieo6/8AFJ7OaQ==
+sidebar_class_name: "get api-method"
+info_path: docs/api/habits/habits-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get completion history"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/habits/{habitId}/completions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get completion history
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"path","required":true,"schema":{"type":"string"}},{"name":"startDate","in":"query","schema":{"type":"string","format":"date"}},{"name":"endDate","in":"query","schema":{"type":"string","format":"date"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","required":["id","habitId","date","completed","pomodoros"],"properties":{"id":{"type":"string"},"habitId":{"type":"string"},"date":{"type":"string","format":"date"},"completed":{"type":"boolean"},"pomodoros":{"type":"integer","minimum":0,"description":"Количество завершённых pomodoro сессий"},"intensity":{"type":"integer","enum":[0,1,2,3,4],"example":2,"title":"IntensityLevel"},"completedAt":{"type":"string","format":"date-time"},"note":{"type":"string","maxLength":500}},"title":"Completion"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
