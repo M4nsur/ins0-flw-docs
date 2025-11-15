@@ -1,0 +1,71 @@
+---
+id: получить-данные-для-графиков
+title: "Получить данные для графиков"
+description: "Получить данные для графиков"
+sidebar_label: "Получить данные для графиков"
+hide_title: true
+hide_table_of_contents: true
+api: eJytVd1uG0UUfpXVuUCJNLHXoUjV3gUokIqLqgnqRfDFeD2Jp92/zoxDLWulxAEq1Eq5gCtAQoIXcE0sNnG9eYUzr8CTwBl7HSd2JUD4wvbOzJ7vm3O+850+GH6kITiAPcON1EaGGpoMMq54LIxQtNeHhMcCAujwljS7bWAgEwgg46YDDJR43pVKtCEwqisY6LAjYg5BH0wvo9e0UTI5gjxni0iZUDJdBHreFaoH736TgUi6MbH8SohnwCBOEwfdE1wR3bY45N3IQDDfyWlJh0pmRqaEgL/g2J5ggSVeeHiBE3vu4e/2BIf2ayzwCoc1yJt0F52liRaaSGz7Pv3cifQzDu2pPcUCR54dYGlf4hivKOgQpzi1r+w3NWAQpokRiaEAPMsiGXIKUH+qKUp/9apcKU45kEbEemk9bT0VoYGVC/3qkK9weAt5/d08vLYnWLrFsSM/rN0q3AG0uRGOdZxFgjA0MMjSOG2nKtWuUEYkWpqek4dKM6GMnOXJvbumaIepijkVZR78zg1+wKEdzJiIF5xwIYBtf/uDrUZjy29QEZfp3AAQlSOhSAcykTEpw1+J/iOWOMGCqmNP7QBHWHo4sq/w2m1McYxTLPDyFnwjX770/4BYBVtBuUnnOpQ7kX9z1RsRZfvawwKnduAenApxiqUDLNZc0J57G/6fJ9/f26zdtJHPGmybvc/uNZdYbTMw0rgi7FbkPhfHIqLGXWx9RhbwUYcr8zE3HHL3WdNtJU7smX2JhR0Q5YVEcbxWoiWOKLnCdNI2BHAkSPHOXwKoO9vR9f7cfvJ6SPjkF0IdVxbVVRE5lDFZUK9HacijTqpNcN+/79d5JuvHjdW8/oQltQdO7GvH7dKzp84nRvTtET/8w32/wdIO8AoL5xJahF0lTW+PmnjWAx8KroTa6RLjRUGJTWVr9Nxyh4DN/3xS9cfDJ/sr5B4+2Xf2gldUSG8DS7y23zoHm1aUsWQePXn4xp7hhT2z3+EYx5uuYjI5TB2X5cpp7z3v0VyT3s6jXWBAGZxBNmp+zV8h8vjB3j4drepmz5ybDHGEk4XG3FJB8puZEr7FgnkuaW9x7FLn1tYqlHlOvuQGxUzIThGX3t/nK7JbrjLOd+05Rap9mYDrVm1i7ix1Plr+q/hu3XpRQiNemHoWcenQnMj6c2EezOYhmWNwMxln2mwyIPnRoX6/xbX4QkV5TsuzWUeKbUvNWxHZ7yGPtFhhsJgg/2h6sfWMn4ne8rg95lGXDjkZH3MlicG/ZLPxeD43Nr13oVYzLektY1ZsqmTlzZxBR/C2UI7CbHcnDEVmlt5bGZ/EfWEVnz7Yhzz/Cy+52aw=
+sidebar_class_name: "get api-method"
+info_path: docs/api/habits/habits-pomodoro-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Получить данные для графиков"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/habits/{habitId}/chart"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Получить данные для графиков
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"path","required":true,"schema":{"type":"string"}},{"name":"period","in":"query","schema":{"type":"string","enum":["week","month","year"],"default":"month"},"description":"Период для графика."}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Массив точек данных.","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","description":"Точка данных для графика прогресса.","required":["date","completions","pomodoros","intensity"],"properties":{"date":{"type":"string","format":"date","description":"Дата.","example":"2025-11-01"},"completions":{"type":"integer","minimum":0,"description":"Количество выполнений.","example":1},"pomodoros":{"type":"integer","minimum":0,"description":"Количество pomodoro.","example":1},"intensity":{"type":"integer","description":"Уровень интенсивности выполнения (0–4).","enum":[0,1,2,3,4],"example":2,"title":"IntensityLevel"}},"title":"HabitChartData"}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

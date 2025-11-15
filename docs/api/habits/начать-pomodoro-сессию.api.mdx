@@ -1,0 +1,71 @@
+---
+id: начать-pomodoro-сессию
+title: "Начать Pomodoro-сессию"
+description: "Создаёт новую Pomodoro-сессию, обычно вызывается при нажатии 'Старт' в таймере."
+sidebar_label: "Начать Pomodoro-сессию"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVk1v20YQ/SvEHIoEoCXKQNGAN7tI0eTQGLGLAJV1WElriwnFZZZLO4YgwJLbuoWNGCl6KFDkkP4CWbBqWbbovzD7j4pZkpJlGm7RtEB0sLnkfrx58+btdECx7QjcKqyJtmgKKaBmQ5NHDemFyhMBuIAfMMFzPMOBfqf7Fk4xwaE+0G+tfM2S7uFI93QPx/qtbWGCp/pIH9JMC4f6CM/1EQ5xgCPd1z19YuG13scxbTXAP3Gg+zjGsbUJ+EH3caD3dX8TLBxaNMILvMKR3sdRCWyQ/HXMI7UqmnvgdszQk7wJrpIxt6EhAsUDRZ9YGPpeg1EQ5ZcRRdKBqNHibUZPai/k4IKov+QNle2bblSFFqt76kkT7HRWzYZQipBL5fGI1ubf59tESnrBNhSY+w3PcIRTik9/j2OcmFgTvZ8xQOToQ5zg2LZwYuEEk/Q7JnhhmcEUE8NrStwNok9K0M0Q/j2QP3CM13flC8fEKg/iNkW+K+QrsCFqCalWJWc08EWwnT7XbOBvWDv06aRsqvKUGeZbbxCOrvkRqVEogihlbdmp0L+CtmbxUHCZ0EgYhOtfp3PxlLt0emLTeUN9gufmvCkODITbmUnwonRLHx5JYy6SOOLSPESKScWbKwZALA3WXEQ2eIHiUsah4s2ipLyPU1Mhn7M0hRUDnjWfBf5eWiVd+39R8OK5rQqpM6Pm447BBC/1MZ6T7ZjXI7wk9d88Lr4zzHlC7kCwJWSbKXChyRRfUl6bF2H9QraDV+RYpI9DHOAlDu6he9lZ/nypUllyKhvOF67juI7zHRHREDThv8JCih2SJ+qfiLW8eP4RpuUZpplE54BIo9tcgg1tL/DaZApOAciveEl+ZNJwnPqT7utj49c9HOFEH+DUXBc/LACpLDvOJ+tYi/U5h1cXwucsKOJ7p4+MFoiMBVtOC4MurOHcyGYotpgfGWnyKPJE8E3crnN5fwYqhbPfY5LeiQtZzxNgynJsPaAvBp2Z0tfHDxfTQQ59m4z1FBZkBt7mqiWaZCMiIlcLmWqBC+UwT0sWRkQp4HKHS+olOhBLnzxAqdAtl33RYH5LRMp95Dxyyiz0yjuVIqG/Y0Jln4pKH+FFHswwjXQfB3hu/p6ai3GCY+jW6NxGLD21t06XQeqmq5xJLldiAjtjltAQTDONMmsmgZ09fJWX4NMXGwVwT19sUC9CAEc4tR5ggtf6RxxjYlqYrA5s4xIWnuoDPNMH+mcc4eghEJF0Yz2fty6P8yTcaCbmlZABNno1wtwSJo4sV1/Tisj6bFYc1sraE7CB2E/hVkpOySkE8fzx+gZNtfCMDNTSB0apZCWXMxu55eoDvDK9CRFOiuvn79K+zngzTvPVdKWaBo5svGe6uknayYzv7BVPaKfSZkBRksLazJhRwEyC8H1qucZc7mw1b4fYmTcMn1bXmmVU8TeqHPrMMxGbIulkNVWFYk3VbKCyoY+dTp1F/Fvpd7v0+nXM5R641ZoNO0x6rE7CqNboZuesSYZS7cArvgcufJkysrSRdiE7zI8JSqGd6tr5ipVGg4fq3rm1G9aw9mydCqaedeRt0aQ1ku3Sjcx2wQWwQZgMmeI07zrgs2A7Zts0N92Tfn8BM8mz2Q==
+sidebar_class_name: "post api-method"
+info_path: docs/api/habits/habits-pomodoro-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Начать Pomodoro-сессию"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/pomodoro-sessions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Создаёт новую Pomodoro-сессию, обычно вызывается при нажатии "Старт" в таймере.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["habitId","type"],"properties":{"habitId":{"type":"string","description":"Идентификатор привычки, к которой относится сессия."},"type":{"type":"string","description":"Тип Pomodoro-сессии.","enum":["work","shortBreak","longBreak"],"example":"work","title":"PomodoroType"}}}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Сессия создана.","content":{"application/json":{"schema":{"type":"object","description":"Pomodoro-сессия, связанная с привычкой.","required":["id","habitId","userId","startedAt","duration","type","interrupted"],"properties":{"id":{"type":"string","description":"Идентификатор сессии.","example":"p1","readOnly":true},"habitId":{"type":"string","description":"Идентификатор привычки.","example":"h1"},"userId":{"type":"string","description":"Идентификатор пользователя.","example":"u1","readOnly":true},"startedAt":{"type":"string","format":"date-time","description":"Время начала сессии.","example":"2025-11-01T07:00:00Z"},"completedAt":{"type":"string","format":"date-time","description":"Время завершения сессии.","example":"2025-11-01T07:20:00Z"},"duration":{"type":"integer","minimum":0,"description":"Длительность в секундах.","example":1200},"type":{"type":"string","description":"Тип Pomodoro-сессии.","enum":["work","shortBreak","longBreak"],"example":"work","title":"PomodoroType"},"interrupted":{"type":"boolean","description":"Была ли сессия прервана.","example":false},"sessionNumber":{"type":"integer","minimum":1,"description":"Номер сессии в серии (если есть).","example":1}},"title":"PomodoroSession"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

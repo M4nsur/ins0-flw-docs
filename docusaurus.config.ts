@@ -7,12 +7,12 @@ const config: Config = {
   tagline: "Документация экспериментального проекта на Feature-Sliced Design",
   favicon: "img/favicon.ico",
 
-  // === GitHub Pages настройки ===
+  // 👉 Правильные GitHub Pages настройки
   url: "https://m4nsur.github.io",
   baseUrl: "/himma-flw-docs/",
 
   organizationName: "M4nsur", // GitHub username
-  projectName: "himma-flw-docs", // Репозиторий с документацией
+  projectName: "himma-flw-docs", // репозиторий с документацией
 
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
@@ -29,9 +29,8 @@ const config: Config = {
         docs: {
           routeBasePath: "/docs",
           sidebarPath: "./sidebars.ts",
-          editUrl:
-            "https://github.com/M4nsur/himma-flw-docs/tree/main/docs/",
-          docItemComponent: "@theme/ApiItem", // Для OpenAPI
+          editUrl: "https://github.com/M4nsur/himma-flw-docs/tree/main/docs/",
+          docItemComponent: "@theme/ApiItem",
         },
         blog: false,
         theme: {
@@ -48,9 +47,18 @@ const config: Config = {
         id: "api",
         docsPluginId: "classic",
         config: {
-          habitsTasksApi: {
-            specPath: "openapi/habits-tasks-api.yaml",
-            outputDir: "docs/api",
+          habitsApi: {
+            specPath: "openapi/habits-api.yaml",
+            outputDir: "docs/api/habits",
+            sidebarOptions: {
+              groupPathsBy: "tag",
+              categoryLinkSource: "tag",
+            },
+          },
+
+          tasksApi: {
+            specPath: "openapi/tasks-api.yaml",
+            outputDir: "docs/api/tasks",
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
@@ -99,44 +107,23 @@ const config: Config = {
         {
           title: "Документация",
           items: [
-            {
-              label: "🚀 Введение",
-              to: "/docs/intro",
-            },
-            {
-              label: "🏗️ Архитектура",
-              to: "/docs/architecture/overview",
-            },
-            {
-              label: "🔌 API Reference",
-              to: "/docs/api",
-            },
+            { label: "🚀 Введение", to: "/docs/intro" },
+            { label: "🏗️ Архитектура", to: "/docs/architecture/overview" },
+            { label: "🔌 API Reference", to: "/docs/api" },
           ],
         },
         {
           title: "Frontend",
           items: [
-            {
-              label: "⚛️ Репозиторий фронтенда",
-              href: "https://github.com/M4nsur/himma-flw",
-            },
-            {
-              label: "🧪 Эксперименты",
-              to: "/docs/experiments/overview",
-            },
+            { label: "⚛️ Setup", to: "/docs/frontend/setup" },
+            { label: "🧪 Эксперименты", to: "/docs/experiments/overview" },
           ],
         },
         {
           title: "Backend",
           items: [
-            {
-              label: "🐹 Go Backend",
-              to: "/docs/backend/overview",
-            },
-            {
-              label: "🔐 Аутентификация",
-              to: "/docs/backend/auth",
-            },
+            { label: "🐹 Go Backend", to: "/docs/backend/overview" },
+            { label: "🔐 Аутентификация", to: "/docs/backend/auth" },
           ],
         },
         {

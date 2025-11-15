@@ -1,0 +1,71 @@
+---
+id: получить-статистику-по-привычке
+title: "Получить статистику по привычке"
+description: "Получить статистику по привычке"
+sidebar_label: "Получить статистику по привычке"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFV8tu20YU/RXiLooEYCzJSAqDO7dJ22RlxC6ycL0Yi2OLCUUyMyM3hkDAjyJpkKDqoosCDRqkX0ArIsrYFvMLd/6ouEPqSTaPpkU3FOfBuWfuOfehPii2L8HZhk3FlCeV15awY0PEBOtyxQWt9SFgXQ4OdNiup267YIMXgAMRUx2wQfCHPU9wFxwletwG2e7wLgOnD+owos+kEl6wD3G8Q5tlFAaSS1pfbTbpx+WyLbxIeSGdiq/0CSb6BDN9TE88x8TCt5hb+FYfYYZD/Uw/wXNMV8CGdhgoHig6hkWR77UZHdO4L+msfhVLuHuftxXYy0Z/xtf6CFN8jZk+whyHmOAYx5jogWVwfDCimTu25xzW7gnBA7WpBGcPwAY/DPa5nI1VqJj/ZdiNfE6Q5GRqI+yGbihCmmAHXLB9Pp3a4OImOzROmHx3lykONnzP+QP/cL3YDzZ0w0B1ZhNEsAgjLpRXEDHBWeGs4qdfcYQpjo0zfihcoU8w10fLvsjIF/wRI2QknRbEy16YWfMCxfe5IKRe4HV7XXCaFdN/YIrn+lQ/LUnBlAzqgUU2iQ68wDGBwwzfGH5wpI/0AEcLUG7Ey97/SBwvMMFzfYwZXmKCF/r5VCb/EFFrNa4RwEei+h3P9FNMMbXw3BjO9BNMjWCHpNQaRIsg1uKK5P5dCFF57oLZ1Wb8t8KemQ963V1jfS8UXabAgT0/ZOrdcF6ZgB6Z+74HkoVDqxT2c+tKEdojHOsBXtZ4Tg+uLrpupRVXgvBjwXfZo+K91axe5SXlJP24iLxaRO8Ov8/Jy4tJ4b93bn0QDC0zImdf6J8WUcaVTPU/orw0mwb6cTVMfCZVGarcvbnI9jRxTnG6RU5egvaLSZxFHdHHeDHF+boWlB4s5tPV5uqNa63WtWYLYgpcT5npbyiRUymXEMe0cL15vabEvlzQSmIooUeCb4owwOSTiut8DexyKWuLzmTh/UXnFeaYl8mFCEotGlqY6x8xw7Oi8poQdD/kuBeYmA/HmOsnmBENmOKlfkbMk0ZG80dn5miXK+b5su6yzHU9Opr5G3P3K3qhCun5lFaymxblQz+jK40wNVAuMFu2P8fwLSFCYciNq2mCjtanxaX085rGRZ/WNy4URlx1Qhcc2Od0K9PcOdAwrYFs9MsWIW5Ioy4bJBcHk/6wJ3yq8UpFTqPhh23md0KpnLXmWrPBIq9x0Kqy8BvmpL2pB95MCuiQnpY+wgT/NM8zzPUJeQKog5S83ROeOtwk9RVK+oIzwcV6jxBP+SE0UHajNN41m8AuX76ahOede1sVcHfubVnU1pBrcGxdIdr0Y8wwN0FS1PzcNiFj4Zk+xZFpTFJMrxq2vGAvNFjm41Jan1mTGmetb9wGG8iDhcnWSnOlWQFy99bmFm0ldVxQj3FqmEtwaDJGbepP8BIz2zJOuzSaKudq04pd197mFAnZFOw1w8wx9TxUEjFb+S6goIhCqbrM5ILyH8KnSXDh7lMiFX+kGpHPPGPTSK1fyrPssEmOzqzXLhS6YwOJkDb1+7tM8m+FH8c0/bDHxSE42zs2HDDhsV2iaLsPrifp3QVnj/lyOXr7s3QIV+6WCe6qRY16Hc5ykgXUoB8wv0cjsOEBP5z7JxXvxDZ0OHO5MBCK1fV2m0dq7rtK9qVAmAbs17e2II7/AgzdaV8=
+sidebar_class_name: "get api-method"
+info_path: docs/api/habits/habits-pomodoro-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Получить статистику по привычке"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/habits/{habitId}/stats"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Получить статистику по привычке
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"habitId","in":"path","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Статистика по привычке.","content":{"application/json":{"schema":{"type":"object","description":"Агрегированная статистика по привычке.","required":["habitId","currentStreak","longestStreak","totalCompletions","totalPomodoros","averagePomodorosPerDay","completionRate","weeklyAverage","monthlyAverage"],"properties":{"habitId":{"type":"string","description":"Идентификатор привычки.","example":"h1"},"currentStreak":{"type":"integer","minimum":0,"description":"Текущая серия выполнений подряд.","example":5},"longestStreak":{"type":"integer","minimum":0,"description":"Максимальная серия выполнений подряд.","example":12},"totalCompletions":{"type":"integer","minimum":0,"description":"Общее количество выполнений.","example":18},"totalPomodoros":{"type":"integer","minimum":0,"description":"Общее количество pomodoro.","example":20},"averagePomodorosPerDay":{"type":"number","format":"float","minimum":0,"description":"Среднее количество pomodoro в день (по дням выполнения).","example":1.1},"completionRate":{"type":"number","format":"float","minimum":0,"maximum":100,"description":"Процент выполнения привычки.","example":60},"weeklyAverage":{"type":"number","format":"float","minimum":0,"description":"Среднее количество выполнений в неделю.","example":6},"monthlyAverage":{"type":"number","format":"float","minimum":0,"description":"Среднее количество выполнений в месяц.","example":18},"lastCompletedDate":{"type":"string","format":"date","description":"Дата последнего выполнения.","example":"2025-11-01"}},"title":"HabitStats"}}}},"404":{"description":"Привычка не найдена.","content":{"application/json":{"schema":{"type":"object","required":["message"],"properties":{"message":{"type":"string","description":"Сообщение об ошибке."},"code":{"type":"string","description":"Машиночитаемый код ошибки."},"details":{"type":"object","additionalProperties":true,"description":"Дополнительные детали ошибки."}},"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

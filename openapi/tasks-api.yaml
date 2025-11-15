@@ -1,0 +1,310 @@
+openapi: 3.0.3
+info:
+  title: Tasks API
+  version: 1.0.0
+  description: |
+    REST API для управления задачами, связанными с привычками и Pomodoro.
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Локальный сервер разработки
+
+tags:
+  - name: Tasks
+    description: Управление задачами (to-do, work, личные дела)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT токен (опционально)
+  schemas:
+    Priority:
+      type: string
+      enum: [low, medium, high]
+      description: Приоритет задачи.
+
+    TaskStatus:
+      type: string
+      enum: [pending, in_progress, completed, cancelled]
+      description: Статус задачи.
+
+    Task:
+      type: object
+      description: Задача пользователя.
+      required:
+        - id
+        - title
+        - priority
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор задачи.
+          example: "1"
+          readOnly: true
+        title:
+          type: string
+          minLength: 3
+          description: Заголовок задачи.
+          example: "Buy groceries"
+        description:
+          type: string
+          description: Подробное описание задачи.
+        dueDate:
+          type: string
+          format: date
+          description: Дата дедлайна (без времени).
+          example: "2025-09-01"
+        category:
+          type: string
+          description: Категория задачи (Personal, Work, Health и т.п.).
+          example: "Work"
+        priority:
+          $ref: "#/components/schemas/Priority"
+        pomodoro:
+          type: integer
+          minimum: 0
+          description: |
+            Фактически потраченные помидоры на задачу.
+            Может быть 0, если пока не работали над задачей.
+          example: 2
+        status:
+          $ref: "#/components/schemas/TaskStatus"
+        createdAt:
+          type: string
+          format: date-time
+          description: Дата и время создания задачи.
+          example: "2025-08-25T10:00:00Z"
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: Дата и время последнего обновления.
+          example: "2025-08-25T10:00:00Z"
+          readOnly: true
+        completedAt:
+          type: string
+          format: date-time
+          description: |
+            Время завершения задачи (когда статус впервые стал completed).
+          example: "2025-08-28T20:15:00Z"
+          readOnly: true
+
+    TaskCreate:
+      type: object
+      description: Параметры для создания задачи (из TaskFormSchema).
+      required:
+        - title
+        - priority
+        - status
+      properties:
+        title:
+          type: string
+          minLength: 3
+          description: Заголовок задачи.
+        description:
+          type: string
+          description: Описание задачи.
+        dueDate:
+          type: string
+          format: date
+          description: Дата дедлайна.
+        category:
+          type: string
+          description: Категория.
+        priority:
+          $ref: "#/components/schemas/Priority"
+        pomodoro:
+          type: integer
+          minimum: 0
+          description: Фактически потраченные помидоры (может быть 0).
+        status:
+          $ref: "#/components/schemas/TaskStatus"
+
+    TaskUpdate:
+      type: object
+      description: Частичное обновление задачи.
+      properties:
+        title:
+          type: string
+          minLength: 3
+          description: Новый заголовок.
+        description:
+          type: string
+          description: Новое описание.
+        dueDate:
+          type: string
+          format: date
+          description: Новый дедлайн.
+        category:
+          type: string
+          description: Новая категория.
+        priority:
+          $ref: "#/components/schemas/Priority"
+        pomodoro:
+          type: integer
+          minimum: 0
+          description: Обновлённое количество помидоров.
+        status:
+          $ref: "#/components/schemas/TaskStatus"
+
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Сообщение об ошибке.
+        code:
+          type: string
+          description: Машиночитаемый код ошибки.
+        details:
+          type: object
+          additionalProperties: true
+          description: Дополнительные детали.
+
+paths:
+  /tasks:
+    get:
+      tags: [Tasks]
+      summary: Получить список задач
+      parameters:
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/TaskStatus"
+          description: Фильтр по статусу.
+        - name: priority
+          in: query
+          schema:
+            $ref: "#/components/schemas/Priority"
+          description: Фильтр по приоритету.
+        - name: category
+          in: query
+          schema:
+            type: string
+          description: Фильтр по категории.
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Поиск по названию/описанию.
+        - name: dueFrom
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Дата дедлайна от (включительно).
+        - name: dueTo
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Дата дедлайна до (включительно).
+      responses:
+        "200":
+          description: Список задач.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+    post:
+      tags: [Tasks]
+      summary: Создать задачу
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreate"
+      responses:
+        "201":
+          description: Задача создана.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "400":
+          description: Неверные данные.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /tasks/{taskId}:
+    get:
+      tags: [Tasks]
+      summary: Получить задачу по ID
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Задача найдена.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Задача не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags: [Tasks]
+      summary: Частично обновить задачу
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdate"
+      responses:
+        "200":
+          description: Задача обновлена.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Задача не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags: [Tasks]
+      summary: Удалить задачу
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Задача удалена.
+        "404":
+          description: Задача не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

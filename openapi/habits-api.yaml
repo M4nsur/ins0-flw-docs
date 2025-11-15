@@ -1,0 +1,940 @@
+openapi: 3.0.3
+info:
+  title: Habits & Pomodoro API
+  version: 1.0.0
+  description: |
+    REST API для управления привычками, отметками выполнения, статистикой и Pomodoro-сессиями.
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Локальный сервер разработки
+
+tags:
+  - name: Habits
+    description: Управление привычками
+  - name: Habit Completions
+    description: Отметки выполнения привычек
+  - name: Statistics
+    description: Статистика и аналитика по привычкам
+  - name: Pomodoro
+    description: Pomodoro-сессии, связанные с привычками
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT токен (опционально, на будущее)
+  schemas:
+    # =============== ENUMS ===============
+    FrequencyType:
+      type: string
+      description: |
+        Тип частоты выполнения привычки.
+        Используется в UI как "Ежедневно / Еженедельно / По дням недели".
+      enum:
+        - daily
+        - weekly
+        - custom
+      example: daily
+
+    IntensityLevel:
+      type: integer
+      description: Уровень интенсивности выполнения (0–4).
+      enum: [0, 1, 2, 3, 4]
+      example: 2
+
+    PomodoroType:
+      type: string
+      description: Тип Pomodoro-сессии.
+      enum:
+        - work
+        - shortBreak
+        - longBreak
+      example: work
+
+    # =============== HABITS ===============
+    Habit:
+      type: object
+      description: Привычка пользователя.
+      required:
+        - id
+        - userId
+        - name
+        - frequency
+        - reminderEnabled
+        - startDate
+        - goalDays
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор привычки.
+          example: h1
+          readOnly: true
+        userId:
+          type: string
+          description: Идентификатор пользователя-владельца привычки.
+          example: u1
+          readOnly: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Название привычки.
+          example: Morning Meditation
+        description:
+          type: string
+          maxLength: 500
+          description: Описание привычки.
+          example: 20-minute mindfulness meditation every morning
+        frequency:
+          $ref: '#/components/schemas/FrequencyType'
+        reminderEnabled:
+          type: boolean
+          description: Включено ли напоминание для этой привычки.
+          example: true
+        reminderTime:
+          type: string
+          format: time
+          nullable: true
+          description: |
+            Время напоминания в формате HH:MM.
+            Присутствует только если reminderEnabled = true.
+          example: "07:30"
+        targetDaysPerWeek:
+          type: integer
+          minimum: 1
+          maximum: 7
+          description: Цель выполнений в неделю (для weekly).
+          example: 5
+        specificDays:
+          type: array
+          description: |
+            Дни недели для custom-привычек.
+            Формат ISO-8601: 1 = Пн, ..., 7 = Вс.
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+          example: [1, 3, 5]
+        startDate:
+          type: string
+          format: date
+          description: Дата начала отслеживания привычки.
+          example: "2025-08-01"
+        goalDays:
+          type: integer
+          minimum: 1
+          description: Цель по количеству дней выполнения.
+          example: 21
+        archived:
+          type: boolean
+          description: Архивирована ли привычка.
+          default: false
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Цвет привычки в UI.
+          example: "#FFD700"
+        progress:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          description: Процент выполнения цели (рассчитывается на бэке).
+          example: 60
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Дата и время создания привычки.
+          example: "2025-08-01T06:30:00Z"
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: Дата и время последнего обновления.
+          example: "2025-11-01T07:00:00Z"
+          readOnly: true
+
+    HabitCreate:
+      type: object
+      description: Параметры для создания привычки.
+      required:
+        - name
+        - frequency
+        - startDate
+        - goalDays
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Название новой привычки.
+        description:
+          type: string
+          maxLength: 500
+          description: Описание новой привычки.
+        frequency:
+          $ref: '#/components/schemas/FrequencyType'
+        reminderEnabled:
+          type: boolean
+          description: Включить ли напоминание.
+          default: false
+        reminderTime:
+          type: string
+          format: time
+          description: Время напоминания в формате HH:MM (если включено).
+          example: "07:30"
+        targetDaysPerWeek:
+          type: integer
+          minimum: 1
+          maximum: 7
+          description: Цель выполнений в неделю (для weekly).
+        specificDays:
+          type: array
+          description: Дни недели (для custom, 1–7, ISO-8601).
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+        startDate:
+          type: string
+          format: date
+          description: Дата начала отслеживания.
+        goalDays:
+          type: integer
+          minimum: 1
+          description: Цель по количеству дней.
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Цвет привычки в UI.
+
+    HabitUpdate:
+      type: object
+      description: Частичное обновление привычки.
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: Новое название привычки.
+        description:
+          type: string
+          maxLength: 500
+          description: Новое описание привычки.
+        frequency:
+          $ref: '#/components/schemas/FrequencyType'
+        reminderEnabled:
+          type: boolean
+          description: Включить/выключить напоминание.
+        reminderTime:
+          type: string
+          format: time
+          description: Новое время напоминания.
+        targetDaysPerWeek:
+          type: integer
+          minimum: 1
+          maximum: 7
+          description: Новая цель в неделю (для weekly).
+        specificDays:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+          description: Новые дни недели (для custom).
+        startDate:
+          type: string
+          format: date
+          description: Новая дата начала.
+        goalDays:
+          type: integer
+          minimum: 1
+          description: Новая цель по дням.
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Новый цвет привычки.
+        archived:
+          type: boolean
+          description: Архивировать / разархивировать.
+
+    # =============== COMPLETIONS ===============
+    HabitCompletion:
+      type: object
+      description: Отметка выполнения привычки за день.
+      required:
+        - id
+        - habitId
+        - userId
+        - date
+        - completed
+        - pomodoros
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор выполнения.
+          example: hc1
+          readOnly: true
+        habitId:
+          type: string
+          description: Идентификатор привычки.
+          example: h1
+        userId:
+          type: string
+          description: Идентификатор пользователя.
+          example: u1
+          readOnly: true
+        date:
+          type: string
+          format: date
+          description: Дата выполнения.
+          example: "2025-11-01"
+        completed:
+          type: boolean
+          description: Выполнена ли привычка в этот день.
+          example: true
+        pomodoros:
+          type: integer
+          minimum: 0
+          description: Количество pomodoro, потраченных на выполнение.
+          example: 1
+        intensity:
+          $ref: '#/components/schemas/IntensityLevel'
+        completedAt:
+          type: string
+          format: date-time
+          description: Точное время выполнения (если было выполнено).
+          example: "2025-11-01T07:20:00Z"
+        note:
+          type: string
+          maxLength: 500
+          description: Дополнительная заметка.
+          example: Felt focused
+
+    HabitCompletionCreate:
+      type: object
+      description: Параметры для создания отметки выполнения.
+      required:
+        - date
+        - completed
+        - pomodoros
+      properties:
+        date:
+          type: string
+          format: date
+          description: Дата, за которую ставится отметка.
+        completed:
+          type: boolean
+          description: Выполнена ли привычка в этот день.
+        pomodoros:
+          type: integer
+          minimum: 0
+          description: Количество pomodoro.
+        intensity:
+          $ref: '#/components/schemas/IntensityLevel'
+        note:
+          type: string
+          maxLength: 500
+          description: Дополнительная заметка.
+
+    # =============== STATS ===============
+    HabitStats:
+      type: object
+      description: Агрегированная статистика по привычке.
+      required:
+        - habitId
+        - currentStreak
+        - longestStreak
+        - totalCompletions
+        - totalPomodoros
+        - averagePomodorosPerDay
+        - completionRate
+        - weeklyAverage
+        - monthlyAverage
+      properties:
+        habitId:
+          type: string
+          description: Идентификатор привычки.
+          example: h1
+        currentStreak:
+          type: integer
+          minimum: 0
+          description: Текущая серия выполнений подряд.
+          example: 5
+        longestStreak:
+          type: integer
+          minimum: 0
+          description: Максимальная серия выполнений подряд.
+          example: 12
+        totalCompletions:
+          type: integer
+          minimum: 0
+          description: Общее количество выполнений.
+          example: 18
+        totalPomodoros:
+          type: integer
+          minimum: 0
+          description: Общее количество pomodoro.
+          example: 20
+        averagePomodorosPerDay:
+          type: number
+          format: float
+          minimum: 0
+          description: Среднее количество pomodoro в день (по дням выполнения).
+          example: 1.1
+        completionRate:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          description: Процент выполнения привычки.
+          example: 60
+        weeklyAverage:
+          type: number
+          format: float
+          minimum: 0
+          description: Среднее количество выполнений в неделю.
+          example: 6
+        monthlyAverage:
+          type: number
+          format: float
+          minimum: 0
+          description: Среднее количество выполнений в месяц.
+          example: 18
+        lastCompletedDate:
+          type: string
+          format: date
+          description: Дата последнего выполнения.
+          example: "2025-11-01"
+
+    ContributionDay:
+      type: object
+      description: Данные для GitHub-style contribution calendar.
+      required:
+        - date
+        - count
+        - level
+        - completed
+      properties:
+        date:
+          type: string
+          format: date
+          description: Дата.
+          example: "2025-11-01"
+        count:
+          type: integer
+          minimum: 0
+          description: Количество выполнений в этот день.
+          example: 1
+        level:
+          $ref: '#/components/schemas/IntensityLevel'
+        completed:
+          type: boolean
+          description: Была ли привычка выполнена в этот день.
+          example: true
+
+    HabitChartData:
+      type: object
+      description: Точка данных для графика прогресса.
+      required:
+        - date
+        - completions
+        - pomodoros
+        - intensity
+      properties:
+        date:
+          type: string
+          format: date
+          description: Дата.
+          example: "2025-11-01"
+        completions:
+          type: integer
+          minimum: 0
+          description: Количество выполнений.
+          example: 1
+        pomodoros:
+          type: integer
+          minimum: 0
+          description: Количество pomodoro.
+          example: 1
+        intensity:
+          $ref: '#/components/schemas/IntensityLevel'
+
+    # =============== POMODORO SESSIONS ===============
+    PomodoroSession:
+      type: object
+      description: Pomodoro-сессия, связанная с привычкой.
+      required:
+        - id
+        - habitId
+        - userId
+        - startedAt
+        - duration
+        - type
+        - interrupted
+      properties:
+        id:
+          type: string
+          description: Идентификатор сессии.
+          example: p1
+          readOnly: true
+        habitId:
+          type: string
+          description: Идентификатор привычки.
+          example: h1
+        userId:
+          type: string
+          description: Идентификатор пользователя.
+          example: u1
+          readOnly: true
+        startedAt:
+          type: string
+          format: date-time
+          description: Время начала сессии.
+          example: "2025-11-01T07:00:00Z"
+        completedAt:
+          type: string
+          format: date-time
+          description: Время завершения сессии.
+          example: "2025-11-01T07:20:00Z"
+        duration:
+          type: integer
+          minimum: 0
+          description: Длительность в секундах.
+          example: 1200
+        type:
+          $ref: '#/components/schemas/PomodoroType'
+        interrupted:
+          type: boolean
+          description: Была ли сессия прервана.
+          example: false
+        sessionNumber:
+          type: integer
+          minimum: 1
+          description: Номер сессии в серии (если есть).
+          example: 1
+
+    # =============== ERROR ===============
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Сообщение об ошибке.
+        code:
+          type: string
+          description: Машиночитаемый код ошибки.
+        details:
+          type: object
+          additionalProperties: true
+          description: Дополнительные детали ошибки.
+
+paths:
+  # ---------- HABITS ----------
+  /habits:
+    get:
+      tags: [Habits]
+      summary: Получить список привычек
+      parameters:
+        - name: includeArchived
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Включать ли архивированные привычки.
+        - name: frequency
+          in: query
+          schema:
+            $ref: '#/components/schemas/FrequencyType'
+          description: Фильтр по типу частоты.
+      responses:
+        '200':
+          description: Список привычек.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Habit'
+    post:
+      tags: [Habits]
+      summary: Создать привычку
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitCreate'
+      responses:
+        '201':
+          description: Привычка создана.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habit'
+        '400':
+          description: Неверные данные.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /habits/{habitId}:
+    get:
+      tags: [Habits]
+      summary: Получить привычку по ID
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Привычка найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habit'
+        '404':
+          description: Привычка не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [Habits]
+      summary: Обновить привычку (частично)
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitUpdate'
+      responses:
+        '200':
+          description: Привычка обновлена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habit'
+        '404':
+          description: Привычка не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [Habits]
+      summary: Удалить привычку
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Привычка удалена.
+        '404':
+          description: Привычка не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ---------- COMPLETIONS ----------
+  /habits/{habitId}/completions:
+    get:
+      tags: [Habit Completions]
+      summary: Получить историю выполнения привычки
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Начальная дата (включительно).
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Конечная дата (включительно).
+      responses:
+        '200':
+          description: Список отметок.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HabitCompletion'
+    post:
+      tags: [Habit Completions]
+      summary: Отметить выполнение привычки
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitCompletionCreate'
+      responses:
+        '201':
+          description: Выполнение создано.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HabitCompletion'
+
+  /habits/{habitId}/completions/{date}:
+    get:
+      tags: [Habit Completions]
+      summary: Получить выполнение за дату
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Отметка найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HabitCompletion'
+        '404':
+          description: Отметка не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [Habit Completions]
+      summary: Удалить отметку выполнения
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '204':
+          description: Отметка удалена.
+        '404':
+          description: Отметка не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ---------- STATS ----------
+  /habits/{habitId}/stats:
+    get:
+      tags: [Statistics]
+      summary: Получить статистику по привычке
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Статистика по привычке.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HabitStats'
+        '404':
+          description: Привычка не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /habits/{habitId}/chart:
+    get:
+      tags: [Statistics]
+      summary: Получить данные для графиков
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [week, month, year]
+            default: month
+          description: Период для графика.
+      responses:
+        '200':
+          description: Массив точек данных.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HabitChartData'
+
+  /habits/{habitId}/contributions:
+    get:
+      tags: [Statistics]
+      summary: Contribution calendar для привычки
+      parameters:
+        - name: habitId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 365
+            minimum: 1
+            maximum: 730
+          description: На сколько дней назад отдавать данные.
+      responses:
+        '200':
+          description: Массив дней активности.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContributionDay'
+
+  # ---------- POMODORO ----------
+  /pomodoro-sessions:
+    get:
+      tags: [Pomodoro]
+      summary: Получить список Pomodoro-сессий
+      parameters:
+        - name: habitId
+          in: query
+          schema:
+            type: string
+          description: Фильтр по привычке.
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Начало интервала.
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Конец интервала.
+      responses:
+        '200':
+          description: Список Pomodoro-сессий.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PomodoroSession'
+    post:
+      tags: [Pomodoro]
+      summary: Начать Pomodoro-сессию
+      description: Создаёт новую Pomodoro-сессию, обычно вызывается при нажатии "Старт" в таймере.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - habitId
+                - type
+              properties:
+                habitId:
+                  type: string
+                  description: Идентификатор привычки, к которой относится сессия.
+                type:
+                  $ref: '#/components/schemas/PomodoroType'
+      responses:
+        '201':
+          description: Сессия создана.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PomodoroSession'
+
+  /pomodoro-sessions/{sessionId}/stop:
+    post:
+      tags: [Pomodoro]
+      summary: Завершить Pomodoro-сессию
+      description: Фиксирует завершение/прерывание сессии и итоговую длительность.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                interrupted:
+                  type: boolean
+                  description: Была ли сессия прервана.
+      responses:
+        '200':
+          description: Обновлённая сессия.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PomodoroSession'
+        '404':
+          description: Сессия не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
