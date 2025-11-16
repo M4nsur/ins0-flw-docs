@@ -26,7 +26,7 @@ const config: Config = {
       "classic",
       {
         docs: {
-          routeBasePath: "/docs", // оставляем документацию здесь
+          routeBasePath: "/docs",
           sidebarPath: "./sidebars.ts",
           editUrl: "https://github.com/M4nsur/himma-flw-docs/tree/main/docs/",
           docItemComponent: "@theme/ApiItem",
@@ -69,11 +69,19 @@ const config: Config = {
   themes: ["docusaurus-theme-openapi-docs"],
 
   themeConfig: {
+    toc: {
+      position: "left",
+    },
     navbar: {
       items: [
         {
           href: "/",
           label: "Главная",
+          position: "left",
+        },
+        {
+          to: "/docs/frontend/overview",
+          label: "Frontend Docs",
           position: "left",
         },
         {
