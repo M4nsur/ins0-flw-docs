@@ -3,15 +3,15 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  title: "Himma-flw ",
-  tagline: "Документация ",
+  title: "Himma-flw",
+  tagline: "Документация",
   favicon: "img/favicon.ico",
 
   url: "https://m4nsur.github.io",
   baseUrl: "/himma-flw-docs/",
 
-  organizationName: "M4nsur", // GitHub username
-  projectName: "himma-flw-docs", // репозиторий с документацией
+  organizationName: "M4nsur",
+  projectName: "himma-flw-docs",
 
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
@@ -26,7 +26,7 @@ const config: Config = {
       "classic",
       {
         docs: {
-          routeBasePath: "/docs",
+          routeBasePath: "/docs", // оставляем документацию здесь
           sidebarPath: "./sidebars.ts",
           editUrl: "https://github.com/M4nsur/himma-flw-docs/tree/main/docs/",
           docItemComponent: "@theme/ApiItem",
@@ -49,23 +49,17 @@ const config: Config = {
           habitsApi: {
             specPath: "openapi/habits-api.yaml",
             outputDir: "docs/api/habits",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-            },
+            sidebarOptions: { groupPathsBy: "tag" },
           },
           tasksApi: {
             specPath: "openapi/tasks-api.yaml",
             outputDir: "docs/api/tasks",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-            },
+            sidebarOptions: { groupPathsBy: "tag" },
           },
           pomodoroApi: {
             specPath: "openapi/pomodoro-api.yaml",
             outputDir: "docs/api/pomodoro",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-            },
+            sidebarOptions: { groupPathsBy: "tag" },
           },
         },
       },
@@ -76,23 +70,17 @@ const config: Config = {
 
   themeConfig: {
     navbar: {
-      title: "Himma-flw",
-      logo: {
-        alt: "Logo",
-        src: "img/logo.svg",
-      },
       items: [
         {
-          type: "doc",
-          docId: "intro",
-          label: "📘 Введение",
+          href: "/",
+          label: "Главная",
           position: "left",
         },
         {
           type: "docSidebar",
           sidebarId: "tutorialSidebar",
           position: "left",
-          label: "🔌 API Reference",
+          label: "API Reference",
         },
         {
           href: "https://github.com/M4nsur/himma-flw",
@@ -108,11 +96,8 @@ const config: Config = {
         {
           title: "API Reference",
           items: [
-            {
-              label: "🔌 Habits API",
-              to: "/docs/api/habits/habits-pomodoro-api",
-            },
-            { label: "✅ Tasks API", to: "/docs/api/tasks/tasks-api" },
+            { label: "Habits API", to: "/docs/api/habits/habits-pomodoro-api" },
+            { label: "Tasks API", to: "/docs/api/tasks/tasks-api" },
           ],
         },
         {
@@ -140,7 +125,7 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
       additionalLanguages: ["bash", "json", "yaml", "go", "typescript"],
     },
-  } satisfies Preset.ThemeConfig,
+  },
 };
 
 export default config;

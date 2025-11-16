@@ -1,37 +1,18 @@
-import type { ReactNode } from "react";
-import clsx from "clsx";
-import Link from "@docusaurus/Link";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import HomepageFeatures from "@site/src/components/HomepageFeatures";
-import Heading from "@theme/Heading";
-
-import styles from "./index.module.css";
-
-function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext();
+import Link from "@docusaurus/Link";
+import "./index.module.css";
+export default function Home() {
   return (
-    <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-      </div>
-    </header>
-  );
-}
-
-export default function Home(): ReactNode {
-  const { siteConfig } = useDocusaurusContext();
-  return (
-    <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
-    >
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
+    <Layout title="Главная" description="Документация Himma-flw">
+      <main style={{ padding: "2rem" }}>
+        <div className="mainPage">
+          <h1>Himma-flw</h1>
+          <h2>
+            Исследовательская модульная система, предназначенная для
+            экспериментального тестирования архитектурных подходов, технологий и
+            методик разработки.
+          </h2>
+        </div>
       </main>
     </Layout>
   );
