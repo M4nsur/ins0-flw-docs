@@ -24,14 +24,12 @@
   line-height: 1.5;
 }
 
-/* Grid of cards */
 .cardsGrid {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
-/* Card style */
 .card {
   display: block;
   padding: 1.5rem;

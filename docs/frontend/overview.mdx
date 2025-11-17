@@ -18,7 +18,7 @@ hide_table_of_contents: false
 
 ## Обзор проекта
 
-### Current Status
+### Текущий статус
 
 Проект находится в активной разработке.
 
@@ -168,8 +168,8 @@ src/
 │   └── task/
 │       ├── taskAdd/              # Добавление задачи
 │       │   ├── ui/
-│       │   │   ├── AddTaskButton.tsx
-│       │   │   └── TaskForm.tsx
+│       │   │   ├── AddTaskButton.tsx # Вызов модалки TaskForm
+│       │   │   └── TaskForm.tsx # Модалка для добавления таски
 │       │   ├── model/
 │       │   │   └── constants.ts  # Опции для форм
 │       │   └── index.ts
@@ -194,7 +194,7 @@ src/
 │       │   ├── TaskCard.tsx      # Карточка задачи
 │       │   └── TaskInfo.tsx      # Детальная информация
 │       ├── model/                # Модель данных
-│       │   ├── types.ts          # TypeScript типы
+│       │   ├── types.ts          # TypeScript типы,
 │       │   ├── schema.ts         # Zod схемы валидации
 │       │   ├── mockData.ts       # Моковые данные
 │       │   └── useTaskDrawerStore.ts  # Zustand store
