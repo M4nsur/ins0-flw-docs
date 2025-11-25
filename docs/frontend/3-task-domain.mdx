@@ -1,0 +1,895 @@
+---
+sidebar_position: 3
+---
+
+# Task (Задачи)
+
+## Обзор
+
+**Task** - центральная бизнес-сущность приложения, представляющая задачу пользователя.
+
+### Функциональность
+
+- ✅ Создание задач с деталями
+- ✅ Просмотр списка задач
+- ✅ Редактирование задач
+- ✅ Удаление задач
+- ✅ Просмотр детальной информации
+- ⏱️ Интеграция с Pomodoro (планируется)
+
+### Структура домена
+
+```
+Task Domain
+├── Entity Layer        # Модель данных, типы, API
+├── Features Layer      # taskAdd, taskEdit, taskDelete
+├── Widgets Layer       # TaskList, TaskDrawer
+└── Pages Layer         # TasksPage
+```
+
+---
+
+## Entity: Task
+
+### Назначение
+
+Определяет структуру данных задачи, её валидацию и API для работы с backend.
+
+### Файловая структура
+
+```
+entities/task/
+├── ui/
+│   ├── TaskCard.tsx          # Карточка задачи
+│   └── TaskInfo.tsx          # Детальная информация
+├── model/
+│   ├── types.ts              # TypeScript типы
+│   ├── schema.ts             # Zod схемы
+│   ├── mockData.ts           # Моковые данные
+│   └── useTaskDrawerStore.ts # Zustand store
+├── api/
+│   └── tasksApi.ts           # API методы
+├── lib/
+│   └── mappers.ts            # DTO ↔ Model преобразования
+└── index.ts                  # Public API
+```
+
+### Типы данных
+
+**model/types.ts:**
+
+```tsx
+import type { z } from "zod";
+import { TaskFormSchema, TaskDtoSchema } from "./schema";
+
+// Тип для форм
+export type TaskFormTypes = z.infer<typeof TaskFormSchema>;
+
+// Тип для API (DTO)
+export type TaskDTO = z.infer<typeof TaskDtoSchema>;
+
+// Тип для бизнес-логики (с Date объектами)
+export type Task = Omit<TaskDTO, "dueDate" | "createdAt" | "completedAt"> & {
+  dueDate?: Date;
+  createdAt: Date;
+  completedAt?: Date;
+};
+
+export type TaskCardType = Task;
+
+// Enum типы
+export type Priority = "low" | "medium" | "high";
+export type TaskStatus = "pending" | "in_progress" | "completed" | "cancelled";
+```
+
+**Разделение типов:**
+- `TaskFormTypes` - для форм (React Hook Form)
+- `TaskDTO` - для API (с ISO строками дат)
+- `Task` - для бизнес-логики (с Date объектами)
+
+### Схемы валидации
+
+**model/schema.ts:**
+
+```tsx
+import { z } from "zod";
+
+// Схема для форм
+export const TaskFormSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  description: z.string().optional(),
+  dueDate: z.date().optional(),
+  category: z.string().optional(),
+  priority: z.enum(["low", "medium", "high"]),
+  pomodoro: z.number().optional(),
+  status: z.enum(["pending", "in_progress", "completed", "cancelled"]),
+});
+
+// Схема для API (DTO)
+export const TaskDtoSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  dueDate: z.string().optional(), // ISO строка
+  category: z.string().optional(),
+  priority: z.enum(["low", "medium", "high"]),
+  pomodoro: z.number().optional(),
+  status: z.enum(["pending", "in_progress", "completed", "cancelled"]),
+  createdAt: z.string(), // ISO строка
+  completedAt: z.string().optional(),
+});
+```
+
+### Store (Zustand)
+
+**model/useTaskDrawerStore.ts:**
+
+```tsx
+import type { TaskCardType } from "./types";
+import { createDrawerStore } from "@/shared/lib/drawerTaskManager";
+
+// Создаём store для управления drawer задач
+export const useTaskDrawerStore = createDrawerStore<TaskCardType>("taskDrawer");
+```
+
+**Использование:**
+```tsx
+const { isOpen, data, mode, openDrawer, closeDrawer } = useTaskDrawerStore();
+
+// Открыть для просмотра
+openDrawer(task, "view");
+
+// Открыть для редактирования
+openDrawer(task, "edit");
+```
+
+### API методы
+
+**api/tasksApi.ts:**
+
+```tsx
+import { taskDtosToTasks } from "../lib/mappers";
+import { mockTaskDtos } from "../model/mockData";
+
+// Получение всех задач
+export const fetchTasks = () => {
+  return taskDtosToTasks(mockTaskDtos);
+};
+
+// В будущем с реальным API:
+export const createTask = async (data: TaskFormTypes) => {
+  const response = await fetch("/api/tasks", {
+    method: "POST",
+    body: JSON.stringify(taskFormToTaskDto(data)),
+  });
+  return response.json();
+};
+
+export const updateTask = async (id: string, data: Partial<TaskFormTypes>) => {
+  // ...
+};
+
+export const deleteTask = async (id: string) => {
+  // ...
+};
+```
+
+### Mappers
+
+**lib/mappers.ts:**
+
+```tsx
+import type { Task, TaskDTO, TaskFormTypes } from "../model/types";
+
+// DTO → Model (преобразуем ISO строки в Date)
+export const taskDtoToTask = (dto: TaskDTO): Task => ({
+  ...dto,
+  dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
+  createdAt: new Date(dto.createdAt),
+  completedAt: dto.completedAt ? new Date(dto.completedAt) : undefined,
+});
+
+// Model → DTO (преобразуем Date в ISO строки)
+export const taskToTaskDto = (task: Partial<Task>): Partial<TaskDTO> => ({
+  ...task,
+  dueDate: task.dueDate?.toISOString().split("T")[0],
+  createdAt: task.createdAt?.toISOString(),
+  completedAt: task.completedAt?.toISOString(),
+});
+
+// Form → DTO (для создания/обновления)
+export const taskFormToTaskDto = (
+  form: TaskFormTypes
+): Omit<TaskDTO, "id" | "createdAt"> => ({
+  title: form.title,
+  description: form.description,
+  category: form.category,
+  priority: form.priority,
+  status: form.status,
+  pomodoro: form.pomodoro,
+  dueDate: form.dueDate?.toISOString().split("T")[0],
+});
+
+// Массив DTO → Массив Model
+export const taskDtosToTasks = (dtos: TaskDTO[]): Task[] =>
+  dtos.map(taskDtoToTask);
+```
+
+### UI компоненты
+
+**ui/TaskCard.tsx:**
+
+```tsx
+import type { TaskCardProps } from "../model/types";
+import { Checkbox } from "@/shared/ui/checkbox";
+import React from "react";
+import Linkify from "linkify-react";
+import { useTaskDrawerStore } from "../model/useTaskDrawerStore";
+
+export const TaskCard = React.memo(({ task, actions }: TaskCardProps) => {
+  const openDrawer = useTaskDrawerStore((state) => state.openDrawer);
+
+  return (
+    <div
+      className="group relative bg-bg-secondary border rounded-xl p-5 
+                 hover:border-accent/50 transition-all cursor-pointer"
+      onClick={() => openDrawer(task, "view")}
+    >
+      {/* Заголовок с чекбоксом */}
+      <div className="flex items-start gap-3">
+        <Checkbox onClick={(e) => e.stopPropagation()} />
+        <h3 className="font-semibold line-clamp-1">{task.title}</h3>
+      </div>
+
+      {/* Описание */}
+      <div className="text-text-secondary line-clamp-3 ml-8">
+        <Linkify>{task.description}</Linkify>
+      </div>
+
+      {/* Футер: дата и действия */}
+      <div className="flex justify-between ml-8 mt-3">
+        <div className="text-xs">{task.dueDate?.toLocaleDateString()}</div>
+        <div onClick={(e) => e.stopPropagation()}>{actions}</div>
+      </div>
+    </div>
+  );
+});
+```
+
+**ui/TaskInfo.tsx:**
+
+```tsx
+import type { Task } from "../model/types";
+
+export const TaskInfo = ({ task }: { task: Task }) => {
+  return (
+    <div className="space-y-4 p-4">
+      {/* Детальная информация о задаче */}
+      <div>
+        <h3 className="font-semibold">Description</h3>
+        <p>{task.description || "No description"}</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <span className="text-sm text-gray-500">Priority</span>
+          <p>{task.priority}</p>
+        </div>
+        <div>
+          <span className="text-sm text-gray-500">Status</span>
+          <p>{task.status}</p>
+        </div>
+      </div>
+
+      {task.dueDate && (
+        <div>
+          <span className="text-sm text-gray-500">Due Date</span>
+          <p>{task.dueDate.toLocaleDateString()}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+### Public API
+
+**index.ts:**
+
+```tsx
+// Экспортируем только то, что нужно другим слоям
+export { useTaskDrawerStore } from "./model/useTaskDrawerStore";
+export { TaskFormSchema, TaskDtoSchema } from "./model/schema";
+export type { Task, TaskFormTypes, TaskCardType, Priority, TaskStatus } from "./model/types";
+
+// UI компоненты НЕ экспортируются!
+// Они используются напрямую в widgets через прямой импорт
+```
+
+---
+
+## Features: Task Actions
+
+### Feature: taskAdd
+
+**Назначение:** Создание новой задачи.
+
+**Файловая структура:**
+```
+features/task/taskAdd/
+├── ui/
+│   ├── AddTaskButton.tsx    # Кнопка + модалка
+│   └── TaskForm.tsx         # Форма создания
+├── model/
+│   └── constants.ts         # Опции для селектов
+└── index.ts
+```
+
+**AddTaskButton.tsx:**
+
+```tsx
+import { useState } from "react";
+import { Button } from "@/shared/ui/button";
+import { BaseModal } from "@/shared/ui";
+import { TaskForm } from "./TaskForm";
+
+export const AddTaskAction = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)} size="sm">
+        Add task
+      </Button>
+      
+      <BaseModal 
+        open={open} 
+        onOpenChange={setOpen} 
+        title="Add New Task"
+      >
+        <TaskForm onSuccess={() => setOpen(false)} />
+      </BaseModal>
+    </>
+  );
+};
+```
+
+**TaskForm.tsx:**
+
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TaskFormSchema, type TaskFormTypes } from "@/entities/task";
+import { FormField } from "@/shared/ui/formField";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { PRIORITY_OPTIONS } from "../model/constants";
+
+export const TaskForm = ({ onSuccess }: { onSuccess: () => void }) => {
+  const form = useForm<TaskFormTypes>({
+    resolver: zodResolver(TaskFormSchema),
+    defaultValues: {
+      priority: "medium",
+      status: "pending",
+    },
+  });
+
+  const onSubmit = async (data: TaskFormTypes) => {
+    try {
+      // await createTask(data);
+      console.log("Creating task", data);
+      onSuccess();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <FormField label="Task title" error={form.formState.errors.title?.message}>
+        <Input {...form.register("title")} placeholder="Enter task title" />
+      </FormField>
+
+      <FormField label="Description">
+        <Textarea {...form.register("description")} />
+      </FormField>
+
+      <FormField label="Priority">
+        <DropdownSelect
+          name="priority"
+          control={form.control}
+          options={PRIORITY_OPTIONS}
+        />
+      </FormField>
+
+      <Button type="submit" className="w-full">
+        Create Task
+      </Button>
+    </form>
+  );
+};
+```
+
+**model/constants.ts:**
+
+```tsx
+export const PRIORITY_OPTIONS = [
+  { value: "low", label: "Low" },
+  { value: "medium", label: "Medium" },
+  { value: "high", label: "High" },
+];
+
+export const STATUS_OPTIONS = [
+  { value: "pending", label: "Pending" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "completed", label: "Completed" },
+  { value: "cancelled", label: "Cancelled" },
+];
+```
+
+---
+
+### Feature: taskEdit
+
+**Назначение:** Редактирование существующей задачи.
+
+**Файловая структура:**
+```
+features/task/taskEdit/
+├── ui/
+│   ├── OpenEditTaskDrawerButton.tsx  # Кнопка открытия
+│   └── EditTaskForm.tsx              # Форма редактирования
+└── index.ts
+```
+
+**OpenEditTaskDrawerButton.tsx:**
+
+```tsx
+import { Button } from "@/shared/ui/button";
+import { Icon } from "@/shared/ui/Icon";
+import { useTaskDrawerStore, type TaskCardType } from "@/entities/task";
+
+export const OpenEditTaskDrawerButton = ({ task }: { task: TaskCardType }) => {
+  const openDrawer = useTaskDrawerStore((state) => state.openDrawer);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Предотвращаем всплытие события
+    openDrawer(task, "edit");
+  };
+
+  return (
+    <Button onClick={handleClick} variant="ghost" size="icon">
+      <Icon name="pencil" />
+    </Button>
+  );
+};
+```
+
+**EditTaskForm.tsx:**
+
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTaskDrawerStore } from "@/entities/task";
+import { TaskFormSchema, type TaskFormTypes } from "@/entities/task";
+import { Button } from "@/shared/ui/button";
+
+export const EditTaskForm = () => {
+  const { data: task, closeDrawer } = useTaskDrawerStore();
+
+  const form = useForm<TaskFormTypes>({
+    resolver: zodResolver(TaskFormSchema),
+    defaultValues: task, // Предзаполняем форму
+  });
+
+  const { formState: { isDirty } } = form;
+
+  const onSubmit = async (data: TaskFormTypes) => {
+    try {
+      // await updateTask(task.id, data);
+      console.log("Updating task", data);
+      closeDrawer();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4">
+      {/* Поля формы аналогичны TaskForm */}
+      <FormField label="Task title">
+        <Input {...form.register("title")} />
+      </FormField>
+
+      {/* ... остальные поля ... */}
+
+      <Button type="submit" disabled={!isDirty} className="w-full">
+        Save Changes
+      </Button>
+    </form>
+  );
+};
+```
+
+---
+
+### Feature: taskDelete
+
+**Назначение:** Удаление задачи с подтверждением.
+
+**Файловая структура:**
+```
+features/task/taskDelete/
+├── ui/
+│   └── DeleteTaskButton.tsx
+├── model/
+│   └── useDeleteTask.ts
+└── index.ts
+```
+
+**DeleteTaskButton.tsx:**
+
+```tsx
+import { useState } from "react";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/shared/ui/button";
+import { ConfirmDialog } from "@/shared/ui";
+import { useDeleteTask } from "../model/useDeleteTask";
+
+export const DeleteTaskButton = ({ taskId }: { taskId: string }) => {
+  const { isDeleting, handleDeleteTask } = useDeleteTask();
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  return (
+    <>
+      <Button 
+        onClick={() => setShowConfirm(true)} 
+        variant="ghost" 
+        size="icon"
+      >
+        <Trash2 className="w-4 h-4" />
+      </Button>
+
+      <ConfirmDialog
+        open={showConfirm}
+        onOpenChange={setShowConfirm}
+        onConfirm={() => handleDeleteTask(taskId)}
+        title="Delete task?"
+        description="This action cannot be undone."
+        confirmText="Delete"
+        isLoading={isDeleting}
+      />
+    </>
+  );
+};
+```
+
+**model/useDeleteTask.ts:**
+
+```tsx
+import { useTaskDrawerStore } from "@/entities/task";
+import { useCallback, useState } from "react";
+
+export const useDeleteTask = () => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const closeDrawer = useTaskDrawerStore((state) => state.closeDrawer);
+
+  const handleDeleteTask = useCallback(
+    async (taskId: string) => {
+      try {
+        setIsDeleting(true);
+        
+        // await deleteTask(taskId);
+        console.log("Deleting task", taskId);
+        
+        closeDrawer(); // Закрываем drawer после удаления
+      } catch (error) {
+        console.error("Delete error:", error);
+      } finally {
+        setIsDeleting(false);
+      }
+    },
+    [closeDrawer]
+  );
+
+  return { isDeleting, handleDeleteTask };
+};
+```
+
+---
+
+## Widgets: Task UI Blocks
+
+### Widget: TaskList
+
+**Назначение:** Отображение списка задач с действиями.
+
+**Файловая структура:**
+```
+widgets/taskList/
+├── ui/
+│   └── TaskList.tsx
+└── index.ts
+```
+
+**TaskList.tsx:**
+
+```tsx
+import { TaskCard } from "@/entities/task/ui/TaskCard";
+import { DeleteTaskButton } from "@/features/task/taskDelete";
+import { OpenEditTaskDrawerButton } from "@/features/task/taskEdit";
+import type { Task } from "@/entities/task";
+
+interface TaskListProps {
+  tasks: Task[];
+}
+
+export const TaskList = ({ tasks }: TaskListProps) => {
+  if (tasks.length === 0) {
+    return (
+      <div className="text-center py-12 text-gray-500">
+        No tasks yet. Create your first task!
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {tasks.map((task) => (
+        <TaskCard
+          key={task.id}
+          task={task}
+          actions={
+            <>
+              <OpenEditTaskDrawerButton task={task} />
+              <DeleteTaskButton taskId={task.id} />
+            </>
+          }
+        />
+      ))}
+    </div>
+  );
+};
+```
+
+**Композиция:**
+- `TaskCard` из entities - отображение задачи
+- `OpenEditTaskDrawerButton` из features - кнопка редактирования
+- `DeleteTaskButton` из features - кнопка удаления
+
+---
+
+### Widget: TaskDrawer
+
+**Назначение:** Drawer для просмотра и редактирования задачи.
+
+**Файловая структура:**
+```
+widgets/taskDrawer/
+├── ui/
+│   └── TaskDrawer.tsx
+└── index.ts
+```
+
+**TaskDrawer.tsx:**
+
+```tsx
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/shared/ui/primitives";
+import { useTaskDrawerStore } from "@/entities/task";
+import { TaskInfo } from "@/entities/task/ui/TaskInfo";
+import { EditTaskForm } from "@/features/task/taskEdit/ui/EditTaskForm";
+import { Button } from "@/shared/ui/button";
+
+export const TaskDrawer = () => {
+  const { isOpen, data, mode, closeDrawer, setMode } = useTaskDrawerStore();
+
+  if (!data) return null;
+
+  return (
+    <Drawer open={isOpen} onOpenChange={closeDrawer}>
+      <DrawerContent>
+        <DrawerHeader className="flex justify-between items-center">
+          <DrawerTitle>{data.title}</DrawerTitle>
+          
+          {mode === "view" && (
+            <Button onClick={() => setMode("edit")} size="sm">
+              Edit
+            </Button>
+          )}
+        </DrawerHeader>
+
+        {mode === "view" ? (
+          <TaskInfo task={data} />
+        ) : (
+          <EditTaskForm />
+        )}
+      </DrawerContent>
+    </Drawer>
+  );
+};
+```
+
+**Режимы работы:**
+- `view` - отображение TaskInfo
+- `edit` - отображение EditTaskForm
+
+**Взаимодействие:**
+```
+TaskCard (click) → openDrawer(task, "view") → TaskInfo
+Edit Button (click) → setMode("edit") → EditTaskForm
+```
+
+---
+
+## Pages: Task Pages
+
+### Page: TasksPage
+
+**Назначение:** Главная страница модуля задач.
+
+**Файловая структура:**
+```
+pages/tasks/
+├── ui/
+│   └── TasksPage.tsx
+└── index.ts
+```
+
+**TasksPage.tsx:**
+
+```tsx
+import { PageHeader } from "@/shared/ui/pageHeader";
+import { AddTaskAction } from "@/features/task/taskAdd";
+import { fetchTasks } from "@/entities/task/api/tasksApi";
+import { TaskDrawer } from "@/widgets/taskDrawer";
+import { TaskList } from "@/widgets/taskList";
+
+const tasks = fetchTasks(); // В будущем: useQuery
+
+export const TasksPage = () => {
+  return (
+    <div className="space-y-6">
+      {/* Header с кнопкой создания */}
+      <PageHeader 
+        title="Tasks" 
+        description="Manage your tasks"
+        action={<AddTaskAction />} 
+      />
+
+      {/* Список задач */}
+      <TaskList tasks={tasks} />
+
+      {/* Drawer для просмотра/редактирования */}
+      <TaskDrawer />
+    </div>
+  );
+};
+```
+
+**index.ts:**
+
+```tsx
+// Default export для lazy loading
+export { TasksPage as default } from "./ui/TasksPage";
+```
+
+**Композиция страницы:**
+1. `PageHeader` - заголовок с описанием
+2. `AddTaskAction` - кнопка создания задачи
+3. `TaskList` - widget для отображения списка
+4. `TaskDrawer` - widget для просмотра/редактирования
+
+---
+
+## Диаграмма взаимодействия
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    TasksPage                        │
+│  ┌─────────────┐  ┌────────────┐  ┌─────────────┐  │
+│  │ PageHeader  │  │  TaskList  │  │ TaskDrawer  │  │
+│  │             │  │            │  │             │  │
+│  │ AddTaskAction  │ TaskCard(s)│  │ TaskInfo /  │  │
+│  │             │  │            │  │ EditForm    │  │
+│  └─────────────┘  └────────────┘  └─────────────┘  │
+└─────────────────────────────────────────────────────┘
+         │                  │                │
+         ▼                  ▼                ▼
+    ┌─────────┐      ┌──────────┐    ┌──────────┐
+    │ taskAdd │      │ taskEdit │    │taskDelete│
+    │ feature │      │ feature  │    │ feature  │
+    └─────────┘      └──────────┘    └──────────┘
+         │                  │                │
+         └──────────────────┼────────────────┘
+                           ▼
+                    ┌──────────────┐
+                    │ Task Entity  │
+                    │ ├── model    │
+                    │ ├── api      │
+                    │ ├── ui       │
+                    │ └── store    │
+                    └──────────────┘
+```
+
+---
+
+## Примеры расширения
+
+### Добавить новое поле
+
+**1. Обновить типы:**
+```tsx
+// entities/task/model/types.ts
+export type Task = {
+  // ...существующие поля
+  tags?: string[]; // Новое поле
+};
+```
+
+**2. Обновить схему:**
+```tsx
+// entities/task/model/schema.ts
+export const TaskFormSchema = z.object({
+  // ...существующие поля
+  tags: z.array(z.string()).optional(),
+});
+```
+
+**3. Обновить mapper:**
+```tsx
+// entities/task/lib/mappers.ts
+export const taskDtoToTask = (dto: TaskDTO): Task => ({
+  ...dto,
+  tags: dto.tags,
+});
+```
+
+**4. Добавить в форму:**
+```tsx
+// features/task/taskAdd/ui/TaskForm.tsx
+<FormField label="Tags">
+  <TagInput {...form.register("tags")} />
+</FormField>
+```
+
+### Добавить фильтрацию
+
+**1. Создать фичу:**
+```
+features/task/taskFilter/
+├── ui/
+│   └── TaskFilterBar.tsx
+├── model/
+│   └── useTaskFilter.ts
+└── index.ts
+```
+
+**2. Использовать в странице:**
+```tsx
+// pages/tasks/ui/TasksPage.tsx
+import { TaskFilterBar } from "@/features/task/taskFilter";
+
+export const TasksPage = () => {
+  const { filteredTasks } = useTaskFilter(tasks);
+
+  return (
+    <>
+      <TaskFilterBar />
+      <TaskList tasks={filteredTasks} />
+    </>
+  );
+};
+```
+
+---
+
+## Итоги
+
+Домен **Task** демонстрирует полную реализацию бизнес-сущности по FSD:
+
+✅ **Entity** - модель данных с типами, схемами, API  
+✅ **Features** - законченные действия пользователя  
+✅ **Widgets** - композитные UI блоки  
+✅ **Pages** - финальная композиция  
+
+Эта структура является эталоном для реализации других доменов (Habit, User, и т.д.).

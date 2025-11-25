@@ -1,0 +1,467 @@
+---
+sidebar_position: 2
+---
+
+# Архитектура и структура проекта
+
+## Feature-Sliced Design (FSD)
+
+Проект построен на архитектуре **Feature-Sliced Design** 
+
+
+---
+
+## Иерархия слоёв (Layers)
+
+```
+┌─────────────────────────────────────┐
+│             app                     │  ← Инициализация приложения
+├─────────────────────────────────────┤
+│            pages                    │  ← Композиция страниц
+├─────────────────────────────────────┤
+│           widgets                   │  ← Крупные блоки UI
+├─────────────────────────────────────┤
+│          features                   │  ← Бизнес-функции
+├─────────────────────────────────────┤
+│          entities                   │  ← Бизнес-сущности
+├─────────────────────────────────────┤
+│           shared                    │  ← Переиспользуемый код
+└─────────────────────────────────────┘
+```
+
+### Правило импортов
+
+```
+app → pages → widgets → features → entities → shared
+```
+
+**Ключевые принципы:**
+
+- ✅ Слой может импортировать **только из нижележащих слоёв**
+- ❌ Запрещены импорты между модулями одного слоя
+- ❌ Запрещены круговые зависимости
+- ✅ Каждый модуль имеет явный Public API через `index.ts`
+
+---
+
+## Структура проекта
+
+```
+src/
+├── app/                          # Слой инициализации
+│   ├── providers/                # Глобальные провайдеры
+│   │   └── theme.tsx
+│   ├── routes/                   # Конфигурация роутинга
+│   │   ├── config/
+│   │   │   └── router.tsx
+│   │   ├── ui/
+│   │   │   └── AppRouter.tsx
+│   │   └── index.ts
+│   ├── layout/                   # Общий layout
+│   │   └── Layout.tsx
+│   ├── styles/                   # Глобальные стили
+│   │   ├── fonts.css
+│   │   └── style.css
+│   ├── App.tsx
+│   └── main.tsx
+│
+├── pages/                        # Слой страниц
+│   ├── dashboard/
+│   ├── tasks/
+│   ├── habits/
+│   └── ...
+│
+├── widgets/                      # Слой виджетов
+│   ├── header/
+│   ├── taskList/
+│   ├── taskDrawer/
+│   └── ...
+│
+├── features/                     # Слой фич
+│   └── task/
+│       ├── taskAdd/
+│       ├── taskEdit/
+│       ├── taskDelete/
+│       └── ...
+│
+├── entities/                     # Слой сущностей
+│   └── task/
+│       ├── ui/
+│       ├── model/
+│       ├── api/
+│       ├── lib/
+│       └── index.ts
+│
+└── shared/                       # Переиспользуемый код
+    ├── ui/                       # UI-kit
+    │   ├── primitives/           # Radix UI обёртки
+    │   └── ...                   # Базовые компоненты
+    ├── lib/                      # Утилиты
+    │   ├── classnames/
+    │   └── drawerTaskManager/
+    └── routes/                   # Константы маршрутов
+```
+
+---
+
+## Описание слоёв
+
+### Layer 1: app
+
+**Назначение:** Точка входа и глобальная конфигурация.
+
+**Содержит:**
+
+- Инициализацию React (`main.tsx`)
+- Композицию провайдеров (`App.tsx`)
+- Конфигурацию роутинга
+- Общий Layout
+- Глобальные стили
+
+**Ключевые файлы:**
+
+```tsx
+// main.tsx - точка входа
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+// App.tsx - композиция провайдеров
+function App() {
+  return (
+    <ThemeProvider>
+      <AppRouter />
+    </ThemeProvider>
+  );
+}
+```
+
+**Правила:**
+
+- ❌ НЕ содержит бизнес-логики
+- ✅ Только композиция и конфигурация
+- ❌ Не экспортируется в другие слои
+
+---
+
+### Layer 2: pages
+
+**Назначение:** Композиция страниц из виджетов и фич.
+
+**Структура:**
+
+```
+pages/tasks/
+├── ui/
+│   └── TasksPage.tsx
+└── index.ts
+```
+
+**Пример:**
+
+```tsx
+export const TasksPage = () => {
+  return (
+    <div>
+      <PageHeader title="Tasks" action={<AddTaskAction />} />
+      <TaskList tasks={tasks} />
+      <TaskDrawer />
+    </div>
+  );
+};
+```
+
+**Правила:**
+
+- ✅ Композиция виджетов и фич
+- ✅ Минимальная логика (fetch данных)
+- ✅ Default export для lazy loading
+- ❌ Не содержит сложной бизнес-логики
+
+---
+
+### Layer 3: widgets
+
+**Назначение:** Крупные самодостаточные блоки UI.
+
+**Характеристики:**
+
+- Составные компоненты
+- Композиция entities и shared
+- Независимые секции интерфейса
+
+**Примеры:**
+
+- `TaskList` - список задач с действиями
+- `TaskDrawer` - drawer для просмотра/редактирования
+- `Header` - шапка приложения
+
+**Правила:**
+
+- ✅ Самодостаточные блоки UI
+- ✅ Композиция entities и features
+- ✅ Используют shared компоненты
+- ❌ Не содержат бизнес-логику операций
+
+---
+
+### Layer 4: features
+
+**Назначение:** Пользовательские действия и сценарии.
+
+**Определение:**
+
+> Feature = Завершённое действие пользователя, меняющее состояние системы
+
+**Структура:**
+
+```
+features/task/taskAdd/
+├── ui/
+│   ├── AddTaskButton.tsx
+│   └── TaskForm.tsx
+├── model/
+│   └── constants.ts
+└── index.ts
+```
+
+**Примеры:**
+
+- `taskAdd` - создание задачи
+- `taskEdit` - редактирование задачи
+- `taskDelete` - удаление задачи
+
+**Правила:**
+
+- ✅ Законченное действие пользователя
+- ✅ UI и логика разделены
+- ✅ Использует типы из entities
+- ❌ Не зависит от других features
+
+---
+
+### Layer 5: entities
+
+**Назначение:** Бизнес-сущности приложения.
+
+**Определение:**
+
+> Entity = Объект предметной области со своим жизненным циклом
+
+**Структура:**
+
+```
+entities/task/
+├── ui/              # UI для отображения
+│   ├── TaskCard.tsx
+│   └── TaskInfo.tsx
+├── model/           # Модель данных
+│   ├── types.ts
+│   ├── schema.ts
+│   ├── mockData.ts
+│   └── useTaskDrawerStore.ts
+├── api/             # API методы
+│   └── tasksApi.ts
+├── lib/             # Утилиты
+│   └── mappers.ts
+└── index.ts         # Public API
+```
+
+**Содержит:**
+
+- TypeScript типы и Zod схемы
+- UI компоненты для отображения
+- API методы (CRUD)
+- Mappers (DTO ↔ Model)
+- Zustand stores
+
+**Правила:**
+
+- ✅ Всё, что относится к сущности
+- ✅ Чёткое разделение типов (DTO, Model, Form)
+- ✅ Store для глобального состояния
+- ⚠️ UI не экспортируется (используется в widgets)
+
+---
+
+### Layer 6: shared
+
+**Назначение:** Переиспользуемый код без бизнес-логики.
+
+**Содержит:**
+
+- UI-kit компоненты (shadcn/ui)
+- Утилиты и хелперы
+- Константы (маршруты)
+- Generic решения
+
+**Структура:**
+
+```
+shared/
+├── ui/
+│   ├── primitives/      # Radix UI обёртки
+│   ├── button.tsx
+│   ├── input.tsx
+│   └── ...
+├── lib/
+│   ├── classnames/      # cn() утилита
+│   └── drawerTaskManager/  # Generic drawer store
+└── routes/
+    └── routes.ts
+```
+
+**Правила:**
+
+- ❌ НЕ знает о бизнес-логике
+- ✅ Максимально generic
+- ✅ Переиспользуем в любом проекте
+- ❌ Нет зависимостей на другие слои
+
+---
+
+## Shared компоненты
+
+### UI Primitives (Radix UI)
+
+**Dialog:**
+
+```tsx
+import { Dialog, DialogContent, DialogHeader } from "@/shared/ui/primitives";
+
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Title</DialogTitle>
+    </DialogHeader>
+    {/* Content */}
+  </DialogContent>
+</Dialog>;
+```
+
+**Drawer:**
+
+```tsx
+import { Drawer, DrawerContent } from "@/shared/ui/primitives";
+
+<Drawer open={open} onOpenChange={setOpen}>
+  <DrawerContent>{/* Content */}</DrawerContent>
+</Drawer>;
+```
+
+### Базовые компоненты
+
+**Button:**
+
+```tsx
+import { Button } from "@/shared/ui/button";
+
+<Button variant="default" size="md">
+  Click
+</Button>;
+// Variants: default, outline, ghost, destructive
+// Sizes: sm, md, lg, icon
+```
+
+**Input, Checkbox, Textarea:**
+
+```tsx
+import { Input } from "@/shared/ui/input";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Textarea } from "@/shared/ui/textarea";
+```
+
+### Утилиты
+
+**cn() - объединение классов:**
+
+```tsx
+import { cn } from "@/shared/lib/classnames";
+
+<div className={cn("base-class", isActive && "active", className)} />;
+```
+
+**Generic Drawer Store:**
+
+```tsx
+import { createDrawerStore } from "@/shared/lib/drawerTaskManager";
+
+export const useTaskDrawerStore = createDrawerStore<TaskType>("taskDrawer");
+```
+
+---
+
+## Система маршрутизации
+
+### 1. Константы маршрутов
+
+```tsx
+// shared/routes/routes.ts
+export const ROUTES = {
+  dashboard: "/",
+  tasks: "tasks",
+  habits: "habits",
+};
+```
+
+### 2. Конфигурация роутера
+
+```tsx
+// app/routes/config/router.tsx
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: Layout,
+    children: [
+      { index: true, Component: DashboardPage },
+      { path: ROUTES.tasks, Component: TasksPage },
+    ],
+  },
+]);
+```
+
+### 3. Провайдер роутера
+
+```tsx
+// app/routes/ui/AppRouter.tsx
+export const AppRouter = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <RouterProvider router={router} />
+  </Suspense>
+);
+```
+
+---
+
+## Layout System
+
+```
+┌─────────────────────────────────────┐
+│            Header                   │
+├─────────────────────────────────────┤
+│                                     │
+│         Main Content (Outlet)       │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+```tsx
+export const Layout = () => (
+  <div className="flex h-screen">
+    <div className="flex flex-col flex-1 w-full">
+      <Header />
+      <main className="flex-1 bg-bg-secondary px-2 sm:p-3 md:p-4">
+        <Outlet />
+      </main>
+    </div>
+  </div>
+);
+```
+
+---
+
+## Следующий раздел
+
+Теперь, когда вы понимаете общую архитектуру, изучите **[Домен Task](./3-task-domain.md)** как эталонный пример реализации бизнес-сущности по FSD.

@@ -80,13 +80,14 @@ const config: Config = {
           position: "left",
         },
         {
-          to: "/docs/frontend/overview",
-          label: "Frontend Docs",
+          type: "docSidebar",
+          sidebarId: "frontendSidebar",
           position: "left",
+          label: "Frontend",
         },
         {
           type: "docSidebar",
-          sidebarId: "tutorialSidebar",
+          sidebarId: "apiSidebar",
           position: "left",
           label: "API Reference",
         },
