@@ -1,0 +1,568 @@
+---
+sidebar_position: 4
+---
+
+# Terminal (Терминал)
+
+## Обзор
+
+**Terminal** - функциональность терминала в приложении, позволяющая пользователю управлять панелью терминала с возможностью полноэкранного режима.
+
+### Функциональность
+
+- ✅ Отображение панели терминала
+- ✅ Переключение полноэкранного режима
+- ✅ Изменение размера панели
+- ✅ Сохранение состояния (localStorage)
+- ⏱️ Интеграция с командной строкой (планируется)
+- ⏱️ История команд (планируется)
+
+### Структура домена
+
+```
+Terminal Domain
+├── Features Layer      # toggleTerminal
+├── Widgets Layer       # Terminal
+└── Integration         # useTerminalPanels hook
+```
+
+---
+
+## Feature: toggleTerminal
+
+### Назначение
+
+Управление состоянием терминала: полноэкранный режим, размер панели, персистентность настроек.
+
+### Файловая структура
+
+```
+features/task/toggleTerminal/
+├── ui/
+│   └── ToggleButton.tsx         # Кнопка переключения режима
+├── model/
+│   ├── useTerminalStore.ts      # Zustand store с persist
+│   └── useTerminalPanels.ts     # Хук для управления панелями
+└── index.ts                      # Public API
+```
+
+### Store (Zustand)
+
+**model/useTerminalStore.ts:**
+
+```typescript
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+interface TerminalStore {
+  isFullscreen: boolean;
+  terminalSize: number;
+  toggleFullscreen: () => void;
+  setTerminalSize: (size: number) => void;
+}
+
+export const useTerminalStore = create<TerminalStore>()(
+  persist(
+    (set) => ({
+      isFullscreen: false,
+      terminalSize: 3,
+
+      toggleFullscreen: () =>
+        set((state) => ({ isFullscreen: !state.isFullscreen })),
+
+      setTerminalSize: (size: number) =>
+        set({ terminalSize: size, isFullscreen: false }),
+    }),
+    {
+      name: "terminal-storage",
+    }
+  )
+);
+```
+
+**Состояние:**
+
+- `isFullscreen` - флаг полноэкранного режима
+- `terminalSize` - размер терминальной панели (в единицах flex/grid)
+- `toggleFullscreen` - переключение режима
+- `setTerminalSize` - установка размера панели
+
+**Персистентность:**
+
+- Используется `zustand/persist` middleware
+- Данные сохраняются в localStorage под ключом `terminal-storage`
+- Автоматическое восстановление при загрузке
+
+### Panels Management Hook
+
+**model/useTerminalPanels.ts:**
+
+```typescript
+import { useEffect, useRef } from "react";
+import type { ImperativePanelHandle } from "react-resizable-panels";
+import { useTerminalStore } from "./useTerminalStore";
+
+export const useTerminalPanels = () => {
+  const isFullscreen = useTerminalStore((state) => state.isFullscreen);
+  const terminalSize = useTerminalStore((state) => state.terminalSize);
+  const mainPanelRef = useRef<ImperativePanelHandle>(null);
+  const terminalPanelRef = useRef<ImperativePanelHandle>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isFullscreen) {
+        mainPanelRef.current?.collapse();
+        terminalPanelRef.current?.expand();
+      } else {
+        mainPanelRef.current?.expand();
+        terminalPanelRef.current?.resize(terminalSize);
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [isFullscreen, terminalSize]);
+
+  return {
+    mainPanelRef,
+    terminalPanelRef,
+  };
+};
+```
+
+**Назначение:**
+
+- Управляет ref'ами для react-resizable-panels
+- Автоматически коллапсирует/раскрывает панели при изменении режима
+- Использует setTimeout для корректной работы анимаций
+- Синхронизирует размер панели с состоянием store
+
+**Использование:**
+
+```typescript
+const { mainPanelRef, terminalPanelRef } = useTerminalPanels();
+
+<Panel ref={mainPanelRef}>
+  <MainContent />
+</Panel>
+<Panel ref={terminalPanelRef}>
+  <Terminal />
+</Panel>
+```
+
+### UI Компонент
+
+**ui/ToggleButton.tsx:**
+
+```typescriptreact
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { useTerminalStore } from "../model/useTerminalStore";
+
+export const ToggleButton = () => {
+  const isFullscreen = useTerminalStore((state) => state.isFullscreen);
+  const toggleFullscreen = useTerminalStore((state) => state.toggleFullscreen);
+
+  return (
+    <button className="bg-inherit" onClick={toggleFullscreen}>
+      {isFullscreen ? <ArrowDown size={16} /> : <ArrowUp size={16} />}
+    </button>
+  );
+};
+```
+
+**Поведение:**
+
+- Отображает ArrowUp в обычном режиме (разворачивание)
+- Отображает ArrowDown в полноэкранном режиме (сворачивание)
+- Использует селекторы Zustand для оптимизации ре-рендеров
+
+### Public API
+
+**index.ts:**
+
+```typescript
+export { useTerminalStore } from "./model/useTerminalStore";
+export { useTerminalPanels } from "./model/useTerminalPanels";
+export { ToggleButton } from "./ui/ToggleButton";
+```
+
+---
+
+## Widget: Terminal
+
+### Назначение
+
+Композитный виджет терминала с header и областью вывода.
+
+### Файловая структура
+
+```
+widgets/terminal/
+├── ui/
+│   └── Terminal.tsx
+└── index.ts
+```
+
+### UI Компонент
+
+**ui/Terminal.tsx:**
+
+```typescriptreact
+import { useTerminalStore } from "@/features/toggleTerminal";
+import { ToggleButton } from "@/features/toggleTerminal/ui/ToggleButton";
+import { cn } from "@/shared/lib/classnames";
+import { useEffect, useState } from "react";
+
+export const Terminal = () => {
+  const isFullscreen = useTerminalStore((state) => state.isFullscreen);
+  const [delay, setDelay] = useState(isFullscreen);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDelay(isFullscreen);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [isFullscreen]);
+
+  return (
+    <div className="flex flex-col">
+      {/* Header */}
+      <div
+        className={cn(
+          "flex text-[11px] items-center justify-between pb-2 pt-1 px-2 border-bg-secondary",
+          delay ? "border-t-2 bg-bg-secondary" : "bg-bg-primary"
+        )}
+      >
+        <div>Terminal</div>
+        <ToggleButton />
+      </div>
+
+      {/* Terminal Content */}
+      <div className="overflow-auto p-2 h-screen bg-bg-secondary">
+        {/* Terminal output will be here */}
+      </div>
+    </div>
+  );
+};
+```
+
+**Особенности реализации:**
+
+1. **Delayed State:**
+
+   - Используется локальный стейт `delay` для плавной анимации стилей
+   - setTimeout синхронизирует визуальные изменения с transition
+
+2. **Dynamic Styling:**
+
+   - Header меняет фон и границы в зависимости от режима
+   - `cn()` утилита для условного объединения классов
+
+3. **Композиция:**
+   - Интегрирует `ToggleButton` из feature
+   - Использует состояние из `useTerminalStore`
+
+### Public API
+
+**index.ts:**
+
+```typescript
+export { Terminal } from "./ui/Terminal";
+```
+
+---
+
+## Интеграция в Layout
+
+### Пример использования с react-resizable-panels
+
+```typescriptreact
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { useTerminalPanels } from "@/features/toggleTerminal";
+import { Terminal } from "@/widgets/terminal";
+
+export const AppLayout = () => {
+  const { mainPanelRef, terminalPanelRef } = useTerminalPanels();
+
+  return (
+    <PanelGroup direction="vertical">
+      {/* Основной контент */}
+      <Panel
+        ref={mainPanelRef}
+        defaultSize={70}
+        minSize={20}
+      >
+        <MainContent />
+      </Panel>
+
+      <PanelResizeHandle />
+
+      {/* Терминал */}
+      <Panel
+        ref={terminalPanelRef}
+        defaultSize={30}
+        minSize={10}
+        collapsible
+      >
+        <Terminal />
+      </Panel>
+    </PanelGroup>
+  );
+};
+```
+
+---
+
+## Диаграмма взаимодействия
+
+```
+┌─────────────────────────────────────────────┐
+│              AppLayout                      │
+│  ┌─────────────┐  ┌──────────────────────┐ │
+│  │ MainContent │  │      Terminal        │ │
+│  │             │  │  ┌────────────────┐  │ │
+│  │             │  │  │ ToggleButton   │  │ │
+│  │             │  │  └────────────────┘  │ │
+│  │             │  │                      │ │
+│  └─────────────┘  └──────────────────────┘ │
+└─────────────────────────────────────────────┘
+         │                    │         │
+         │                    │         │
+         ▼                    ▼         ▼
+    ┌─────────────────────────────────────┐
+    │      toggleTerminal Feature         │
+    │  ┌───────────────┐ ┌──────────────┐│
+    │  │TerminalStore  │ │TerminalPanels││
+    │  │ (zustand)     │ │ (hook)       ││
+    │  └───────────────┘ └──────────────┘│
+    └─────────────────────────────────────┘
+                │
+                ▼
+         ┌─────────────┐
+         │ localStorage│
+         └─────────────┘
+```
+
+---
+
+## Состояния компонента
+
+### Нормальный режим
+
+```
+┌────────────────────────────────┐
+│        Main Content            │
+│                                │
+│                                │  ← 70% высоты
+│                                │
+├────────────────────────────────┤
+│ Terminal              ↑        │  ← 30% высоты
+│ > command output               │
+└────────────────────────────────┘
+```
+
+### Полноэкранный режим
+
+```
+┌────────────────────────────────┐
+│ Terminal              ↓        │
+│                                │
+│ > command output               │  ← 100% высоты
+│                                │
+│                                │
+└────────────────────────────────┘
+```
+
+---
+
+## Примеры расширения
+
+### 1. Добавить историю команд
+
+**Создать модель:**
+
+```typescript
+// features/toggleTerminal/model/useTerminalHistory.ts
+interface TerminalHistory {
+  commands: string[];
+  addCommand: (cmd: string) => void;
+  clearHistory: () => void;
+}
+
+export const useTerminalHistory = create<TerminalHistory>()(
+  persist(
+    (set) => ({
+      commands: [],
+      addCommand: (cmd) =>
+        set((state) => ({ commands: [...state.commands, cmd] })),
+      clearHistory: () => set({ commands: [] }),
+    }),
+    { name: "terminal-history" }
+  )
+);
+```
+
+**Использовать в Terminal:**
+
+```typescript
+const { commands, addCommand } = useTerminalHistory();
+
+const handleCommand = (cmd: string) => {
+  addCommand(cmd);
+  // execute command
+};
+```
+
+### 2. Добавить настройки размера шрифта
+
+**Расширить store:**
+
+```typescript
+interface TerminalStore {
+  // ...existing
+  fontSize: number;
+  setFontSize: (size: number) => void;
+}
+
+// В store:
+fontSize: 14,
+setFontSize: (size) => set({ fontSize: size }),
+```
+
+**Создать компонент настроек:**
+
+```typescript
+// features/toggleTerminal/ui/TerminalSettings.tsx
+export const TerminalSettings = () => {
+  const { fontSize, setFontSize } = useTerminalStore();
+
+  return (
+    <div>
+      <label>Font Size</label>
+      <input
+        type="range"
+        min={10}
+        max={20}
+        value={fontSize}
+        onChange={(e) => setFontSize(Number(e.target.value))}
+      />
+    </div>
+  );
+};
+```
+
+### 3. Добавить темы терминала
+
+**Создать feature:**
+
+```
+features/terminalTheme/
+├── ui/
+│   └── ThemeSelector.tsx
+├── model/
+│   ├── themes.ts
+│   └── useThemeStore.ts
+└── index.ts
+```
+
+**Определить темы:**
+
+```typescript
+// features/terminalTheme/model/themes.ts
+export const terminalThemes = {
+  default: {
+    bg: "bg-gray-900",
+    text: "text-gray-100",
+    accent: "text-green-400",
+  },
+  dracula: {
+    bg: "bg-[#282a36]",
+    text: "text-[#f8f8f2]",
+    accent: "text-[#ff79c6]",
+  },
+  solarized: {
+    bg: "bg-[#002b36]",
+    text: "text-[#839496]",
+    accent: "text-[#268bd2]",
+  },
+};
+```
+
+---
+
+## Best Practices
+
+### 1. Управление ref'ами
+
+```typescript
+// ✅ Правильно - используем setTimeout для корректной работы с панелями
+useEffect(() => {
+  const timer = setTimeout(() => {
+    panelRef.current?.collapse();
+  }, 0);
+  return () => clearTimeout(timer);
+}, [dependency]);
+
+// ❌ Неправильно - прямой вызов может не сработать
+useEffect(() => {
+  panelRef.current?.collapse();
+}, [dependency]);
+```
+
+### 2. Оптимизация селекторов
+
+```typescript
+// ✅ Правильно - подписка только на нужное поле
+const isFullscreen = useTerminalStore((state) => state.isFullscreen);
+
+// ❌ Неправильно - ре-рендер при любом изменении store
+const store = useTerminalStore();
+```
+
+### 3. Персистентность
+
+```typescript
+// ✅ Правильно - используем persist для важных настроек
+export const useTerminalStore = create<TerminalStore>()(
+  persist(
+    (set) => ({
+      /* store */
+    }),
+    { name: "terminal-storage" }
+  )
+);
+
+// ⚠️ Опционально - можно использовать без persist для временных данных
+export const useTerminalSession = create<SessionStore>((set) => ({
+  /* temporary state */
+}));
+```
+
+### 4. Delayed визуальные изменения
+
+```typescript
+// ✅ Правильно - плавная анимация стилей
+const [delay, setDelay] = useState(isFullscreen);
+
+useEffect(() => {
+  const timer = setTimeout(() => setDelay(isFullscreen), 0);
+  return () => clearTimeout(timer);
+}, [isFullscreen]);
+
+// Использование:
+<div className={cn(delay ? "style-a" : "style-b")} />;
+```
+
+---
+
+## Итоги
+
+Домен **Terminal** демонстрирует:
+
+✅ **Feature-слой** - управление состоянием и панелями  
+✅ **Widget-слой** - композитный UI компонент  
+✅ **Персистентность** - сохранение настроек  
+✅ **Интеграция** - работа с react-resizable-panels  
+✅ **Оптимизация** - селекторы и delayed state
+
+Эта структура легко расширяется для добавления новой функциональности (команды, история, темы).
