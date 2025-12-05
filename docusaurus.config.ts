@@ -3,15 +3,15 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  title: "Himma-flw",
+  title: "ins0-flw",
   tagline: "Документация",
   favicon: "img/favicon.ico",
 
   url: "https://m4nsur.github.io",
-  baseUrl: "/himma-flw-docs/",
+  baseUrl: "/ins0-flw-docs/",
 
   organizationName: "M4nsur",
-  projectName: "himma-flw-docs",
+  projectName: "ins0-flw-docs",
 
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
