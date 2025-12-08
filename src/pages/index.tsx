@@ -4,7 +4,7 @@ import styles from "./index.module.css";
 
 export default function Home() {
   return (
-    <Layout title="Главная" description="Документация Himma-flw">
+    <Layout title="Главная" description="Документация ins0-flw">
       <main className={styles.container}>
         {/* Hero */}
         <section className={styles.hero}>
